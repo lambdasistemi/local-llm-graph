@@ -1,0 +1,15 @@
+{
+  "title": "Local LLM Ecosystem",
+  "description": "The constellation of models, inference engines, quantization formats, APIs, proxies, and hardware for running LLMs locally — with a focus on AMD Strix Halo and Claude Code integration.",
+  "sourceUrl": "https://github.com/lambdasistemi/local-llm-graph",
+  "kinds": {
+    "model": { "label": "Model", "color": "#f0883e", "shape": "ellipse" },
+    "engine": { "label": "Inference Engine", "color": "#3fb950", "shape": "round-rectangle" },
+    "format": { "label": "Quantization Format", "color": "#d2a8ff", "shape": "diamond" },
+    "proxy": { "label": "API Proxy / Router", "color": "#58a6ff", "shape": "round-hexagon" },
+    "assistant": { "label": "Coding Assistant", "color": "#f778ba", "shape": "round-octagon" },
+    "hardware": { "label": "Hardware / Backend", "color": "#79c0ff", "shape": "barrel" },
+    "hub": { "label": "Model Hub / Quantizer", "color": "#e3b341", "shape": "round-pentagon" },
+    "protocol": { "label": "API Protocol", "color": "#8b949e", "shape": "rectangle" }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "id": "claude-code-hybrid",
+  "title": "Hybrid Cloud/Local with Claude Code",
+  "description": "How to route Claude Code between Anthropic's API and local models.",
+  "stops": [
+    {
+      "node": "claude-code",
+      "depth": 1,
+      "title": "The Goal: Seamless Hybrid",
+      "narrative": "[Claude Code](node:claude-code) speaks only the [Anthropic Messages API](node:anthropic-api). The goal is to route some requests to local models (free, always available) and complex tasks to Anthropic's cloud (powerful, costs money).\n\nThere are three paths to achieve this, from simplest to most sophisticated."
+    },
+    {
+      "node": "ollama",
+      "depth": 2,
+      "title": "Path 1: Direct Ollama Connection",
+      "narrative": "The simplest setup. Since [Ollama](node:ollama) v0.14.0 supports the [Anthropic API](node:anthropic-api) natively:\n\n```bash\nexport ANTHROPIC_BASE_URL=\"http://localhost:11434\"\nexport ANTHROPIC_AUTH_TOKEN=\"dummy\"\nclaude\n```\n\nThis sends everything to local models. Use `/model` inside Claude Code to switch between models you've pulled. Limitation: no automatic cloud fallback for complex tasks — you manually switch.\n\nClaude Code sends a ~16k token system prompt, so you need models with at least 64K context."
+    },
+    {
+      "node": "ccproxy",
+      "depth": 2,
+      "title": "Path 2: Intelligent Routing with CCProxy",
+      "narrative": "[CCProxy](node:ccproxy) is purpose-built for Claude Code. This Go-based proxy intercepts requests and routes them based on token count, tool usage, or custom rules.\n\nFor example: send exploration/search subagent requests to local [Ollama](node:ollama), but route complex multi-file edits and planning to Anthropic's cloud. CCProxy can also connect to GitHub Copilot and Claude Pro/Max via OAuth.\n\nThis is the most Claude Code-aware routing option."
+    },
+    {
+      "node": "litellm",
+      "depth": 2,
+      "title": "Path 3: Full Proxy with LiteLLM",
+      "narrative": "[LiteLLM](node:litellm) is the general-purpose option. It translates between the [Anthropic API](node:anthropic-api) and [OpenAI-compatible](node:openai-api) backends, adds load balancing, fallbacks, and cost tracking.\n\n```bash\nexport ANTHROPIC_BASE_URL=\"http://0.0.0.0:4000\"\nexport ANTHROPIC_AUTH_TOKEN=\"$LITELLM_MASTER_KEY\"\n```\n\nMore complex to set up than [CCProxy](node:ccproxy) but more flexible — works with any backend, not just Claude Code. Security note: vet your LiteLLM version carefully (past PyPI compromise)."
+    },
+    {
+      "node": "aider",
+      "depth": 2,
+      "title": "Alternative: Aider for Local-Only",
+      "narrative": "If you want a coding assistant that's fully local-native, [Aider](node:aider) speaks [OpenAI-compatible API](node:openai-api) directly. No proxy needed — point it at [Ollama](node:ollama), [llama.cpp](node:llama-cpp) server, or [LM Studio](node:lm-studio).\n\nAider has deep git integration, multi-file editing, and auto-commits. Use it alongside Claude Code: Aider for local tasks, Claude Code for cloud tasks. Or use [Continue.dev](node:continue-dev) in your IDE for inline completions from a local model while Claude Code handles complex work in the terminal."
+    },
+    {
+      "node": "anthropic-api",
+      "depth": 2,
+      "title": "The Protocol Bridge",
+      "narrative": "Everything hinges on two protocols: the [Anthropic Messages API](node:anthropic-api) (/v1/messages) and the [OpenAI-compatible API](node:openai-api) (/v1/chat/completions).\n\nClaude Code only speaks Anthropic. Most local engines only speak OpenAI. The bridge between them — [Ollama](node:ollama) (native), [CCProxy](node:ccproxy), or [LiteLLM](node:litellm) — is the critical piece.\n\nTool calling (function calling) is the main pain point. Some local engines drop tool call responses during streaming, limiting models to chat-only interactions. [Qwen3-Coder-Next](node:qwen3-coder-next) and [Devstral 2](node:devstral-2) have the best tool calling support among local models."
+    }
+  ]
+}

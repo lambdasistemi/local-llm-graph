@@ -1,0 +1,20 @@
+[
+  {
+    "id": "strix-halo-setup",
+    "title": "Setting Up Strix Halo for Local LLMs",
+    "description": "From hardware to running your first model — the complete path.",
+    "file": "data/tutorials/strix-halo-setup.json"
+  },
+  {
+    "id": "claude-code-hybrid",
+    "title": "Hybrid Cloud/Local with Claude Code",
+    "description": "How to route Claude Code between Anthropic's API and local models.",
+    "file": "data/tutorials/claude-code-hybrid.json"
+  },
+  {
+    "id": "model-selection",
+    "title": "Choosing the Right Model",
+    "description": "Navigate the model landscape — code, reasoning, and general purpose.",
+    "file": "data/tutorials/model-selection.json"
+  }
+]

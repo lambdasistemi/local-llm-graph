@@ -1,0 +1,37 @@
+{
+  "id": "strix-halo-setup",
+  "title": "Setting Up Strix Halo for Local LLMs",
+  "description": "From hardware to running your first model — the complete path.",
+  "stops": [
+    {
+      "node": "strix-halo",
+      "depth": 1,
+      "title": "The Hardware Foundation",
+      "narrative": "The AMD Strix Halo is exceptional for local LLM inference. Its 128GB unified memory means the GPU and CPU share the same pool — models loaded in RAM are directly accessible by compute units. This eliminates the bottleneck that plagues discrete GPU setups where models must be split across VRAM and system RAM.\n\nThe key specs: 16 Zen 5 cores, 40 RDNA 3.5 compute units, XDNA 2 NPU at 50 TOPS, and ~215 GB/s memory bandwidth. At ~5 tokens/second on a 70B model (bandwidth-bound), it's not cloud-fast, but it's always available and free to run."
+    },
+    {
+      "node": "vulkan",
+      "depth": 2,
+      "title": "Choose Your Backend: Vulkan Wins (For Now)",
+      "narrative": "On [Strix Halo](node:strix-halo), the [Vulkan](node:vulkan) backend via the RADV open-source driver is currently faster than [ROCm](node:rocm) for both prompt processing and token generation. It's also much simpler to set up.\n\n[ROCm](node:rocm) has performance regressions on Strix Halo — the HIP backend barely outperforms CPU for prompt processing, and there are KV cache bugs. If you need ROCm for specific features, use flash attention (-fa 1) and --no-mmap as mandatory flags.\n\nThe [XDNA NPU](node:xdna-npu) is a third option for smaller models, accessed through [Lemonade](node:lemonade) or [FastFlowLM](node:fastflowlm)."
+    },
+    {
+      "node": "ollama",
+      "depth": 2,
+      "title": "Ollama: The Simplest Path",
+      "narrative": "[Ollama](node:ollama) wraps [llama.cpp](node:llama-cpp) with a friendly CLI and REST API. Install it, then pull a model:\n\n```\nollama pull qwen2.5-coder:32b-instruct-q8_0\nollama run qwen2.5-coder:32b-instruct-q8_0\n```\n\nSince v0.14.0, Ollama natively supports the [Anthropic Messages API](node:anthropic-api), which means [Claude Code](node:claude-code) can connect directly without any translation proxy. This is a game-changer for hybrid setups."
+    },
+    {
+      "node": "gguf",
+      "depth": 2,
+      "title": "GGUF: The Standard Format",
+      "narrative": "[GGUF](node:gguf) is the universal format for [llama.cpp](node:llama-cpp) and [Ollama](node:ollama). It packages model weights, tokenizer, and metadata in a single file.\n\nThe quantization levels that matter for 128GB hardware:\n- **Q8_0** (~0.53 GB/B): Near-lossless. Use for 32B models.\n- **Q6_K** (~0.52 GB/B): Excellent quality. Use for 70B models.\n- **Q5_K_M** (~0.48 GB/B): Great quality. Fits 70B with room for context.\n- **Q4_K_M** (~0.43 GB/B): Good quality. Fits 100B+ models.\n\nGet GGUF files from [HuggingFace](node:huggingface) — [bartowski](node:bartowski) and [Unsloth](node:unsloth) are the most active quantizers."
+    },
+    {
+      "node": "lemonade",
+      "depth": 2,
+      "title": "Lemonade: Using the NPU",
+      "narrative": "[Lemonade](node:lemonade) is AMD's lightweight native inference server — just a 2MB binary. It splits the workload: the [XDNA NPU](node:xdna-npu) handles prompt processing (prefill) for fast time-to-first-token, while the iGPU handles token generation.\n\nIt serves an [OpenAI-compatible API](node:openai-api) at localhost:13305. Best for power-efficient inference of smaller models. For larger models (32B+), stick with [Ollama](node:ollama) on [Vulkan](node:vulkan)."
+    }
+  ]
+}
