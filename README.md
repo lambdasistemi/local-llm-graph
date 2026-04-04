@@ -4,8 +4,8 @@ Interactive knowledge graph of the local LLM ecosystem — models, inference eng
 
 ## What's in the graph
 
-- **46 nodes** across 8 categories: models, engines, formats, proxies, assistants, hardware, hubs, protocols
-- **62 edges** showing compatibility, translation, and dependency relationships
+- **53 nodes** across 8 categories: models, engines, formats, proxies, assistants, hardware, hubs, protocols
+- **80 edges** showing compatibility, translation, and dependency relationships
 - **3 guided tutorials**: hardware setup, hybrid Claude Code routing, model selection
 
 ## Data format

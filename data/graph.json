@@ -458,6 +458,77 @@
       ]
     },
     {
+      "id": "localai",
+      "label": "LocalAI",
+      "kind": "engine",
+      "group": "engines",
+      "description": "Open-source Go-based AI engine. Drop-in replacement for both OpenAI AND Anthropic APIs natively (since v3.10.0). Supports multiple backends: llama.cpp, vLLM, Transformers, ExLlama2. Handles text, image, audio, video, embeddings, TTS, function calling, and constrained grammars. The only engine besides Ollama that speaks Anthropic Messages API natively.",
+      "links": [
+        { "label": "Website", "url": "https://localai.io" },
+        { "label": "GitHub", "url": "https://github.com/mudler/LocalAI" }
+      ]
+    },
+    {
+      "id": "kobold-cpp",
+      "label": "kobold.cpp",
+      "kind": "engine",
+      "group": "engines",
+      "description": "Single-file llama.cpp fork with integrated web UI. Focused on creative writing and roleplay but fully capable for code. Triple API: KoboldAI + OpenAI + Ollama compatible endpoints. Zero-install single executable with built-in memory and SillyTavern integration.",
+      "links": [
+        { "label": "GitHub", "url": "https://github.com/LostRuins/koboldcpp" }
+      ]
+    },
+    {
+      "id": "aphrodite",
+      "label": "Aphrodite Engine",
+      "kind": "engine",
+      "group": "engines",
+      "description": "vLLM-based engine by PygmalionAI with the broadest quantization support of any engine: AQLM, AWQ, BitNet, bitsandbytes, EETQ, GGUF, GPTQ, QuIP#, EXL2, Marlin, FP2-FP12, NVFP4, MXFP4, and more. OpenAI-compatible API. Context parallelism and dynamic model management. v0.10.0 (Nov 2025).",
+      "links": [
+        { "label": "GitHub", "url": "https://github.com/aphrodite-engine/aphrodite-engine" }
+      ]
+    },
+    {
+      "id": "powerinfer",
+      "label": "PowerInfer",
+      "kind": "engine",
+      "group": "engines",
+      "description": "Sparse heterogeneous GPU-CPU inference engine from SJTU-IPADS. Exploits power-law neuron activation: hot neurons on GPU, cold neurons on CPU. Up to 11.69x faster than llama.cpp. 13.20 tok/s on OPT-175B with single RTX 4090 (only 18% below A100). PowerInfer-2 targets smartphones.",
+      "links": [
+        { "label": "GitHub", "url": "https://github.com/SJTU-IPADS/PowerInfer" }
+      ]
+    },
+    {
+      "id": "mlc-llm",
+      "label": "MLC LLM",
+      "kind": "engine",
+      "group": "engines",
+      "description": "Machine learning compiler for universal LLM deployment via Apache TVM. Compiles models to run on CUDA, Vulkan, Metal, WebGPU (in-browser via WebLLM), iOS, Android. ML compilation optimizes per-target. WebLLM enables full in-browser inference with no server.",
+      "links": [
+        { "label": "Documentation", "url": "https://llm.mlc.ai/docs/get_started/introduction" }
+      ]
+    },
+    {
+      "id": "exl3",
+      "label": "EXL3",
+      "kind": "format",
+      "group": "quantization",
+      "description": "ExLlamaV3's next-gen format using QTIP-based Hadamard transforms and trellis encoding on 16x16 Tensor Core tiles. Coherent at 1.6 bits per weight — a 70B model in under 16GB VRAM. Marlin-inspired GEMM kernel approaches memory bandwidth limit at 4 bpw. NVIDIA CUDA only.",
+      "links": [
+        { "label": "ExLlamaV3 GitHub", "url": "https://github.com/turboderp-org/exllamav3" }
+      ]
+    },
+    {
+      "id": "aqlm",
+      "label": "AQLM",
+      "kind": "format",
+      "group": "quantization",
+      "description": "Additive Quantization of Language Models. Multi-codebook approach dividing weight vectors into sub-vectors approximated by codewords. State-of-the-art quality at 2 bits per weight. Outperforms GPTQ and QuIP# at extreme compression levels.",
+      "links": [
+        { "label": "Paper", "url": "https://arxiv.org/abs/2401.06118" }
+      ]
+    },
+    {
       "id": "ollama-library",
       "label": "Ollama Library",
       "kind": "hub",
@@ -530,6 +601,24 @@
     { "source": "mixtral-8x22b", "target": "gguf", "label": "available as", "description": "Mixtral 8x22B at Q4_K_M (~85GB) fits in 128GB but tight — limited room for long context." },
     { "source": "mixtral-8x22b", "target": "strix-halo", "label": "benefits from unified memory", "description": "MoE models like Mixtral 8x22B benefit greatly from unified memory — all 141B parameters are accessible without PCIe transfers." },
     { "source": "gemma2-27b", "target": "gguf", "label": "available as", "description": "Gemma 2 27B at Q4_K_M (~17GB) is very efficient but limited by 8K context." },
-    { "source": "gemma2-27b", "target": "ollama", "label": "available via", "description": "Gemma 2 27B is available in the Ollama Library with multiple quantization options." }
+    { "source": "gemma2-27b", "target": "ollama", "label": "available via", "description": "Gemma 2 27B is available in the Ollama Library with multiple quantization options." },
+    { "source": "localai", "target": "anthropic-api", "label": "supports natively", "description": "Since v3.10.0, LocalAI natively serves the Anthropic Messages API alongside OpenAI — one of only two engines (with Ollama) that speak Anthropic directly." },
+    { "source": "localai", "target": "openai-api", "label": "supports natively", "description": "LocalAI serves OpenAI-compatible endpoints as its primary API." },
+    { "source": "localai", "target": "llama-cpp", "label": "uses as backend", "description": "LocalAI can use llama.cpp as one of its inference backends, alongside vLLM, Transformers, and ExLlama2." },
+    { "source": "localai", "target": "gguf", "label": "supports", "description": "LocalAI supports GGUF, GGML, Safetensors, PyTorch, GPTQ, and AWQ formats." },
+    { "source": "claude-code", "target": "localai", "label": "direct connection", "description": "LocalAI speaks Anthropic Messages API natively — Claude Code can connect directly via ANTHROPIC_BASE_URL without any translation proxy." },
+    { "source": "kobold-cpp", "target": "llama-cpp", "label": "forks", "description": "kobold.cpp is a fork of llama.cpp with an integrated web UI and triple API compatibility (KoboldAI + OpenAI + Ollama)." },
+    { "source": "kobold-cpp", "target": "gguf", "label": "uses", "description": "kobold.cpp uses GGUF format, inheriting all quantization levels from llama.cpp." },
+    { "source": "kobold-cpp", "target": "openai-api", "label": "serves", "description": "kobold.cpp serves KoboldAI, OpenAI, and Ollama compatible endpoints simultaneously." },
+    { "source": "aphrodite", "target": "vllm", "label": "forks", "description": "Aphrodite is based on vLLM with extended quantization support — adding AQLM, QuIP#, EXL2, BitNet, and FP2-FP12 formats." },
+    { "source": "aphrodite", "target": "openai-api", "label": "serves", "description": "Aphrodite provides an OpenAI-compatible API with the broadest quantization format support of any engine." },
+    { "source": "aphrodite", "target": "aqlm", "label": "supports", "description": "Aphrodite is one of the few engines supporting AQLM for extreme 2-bit quantization." },
+    { "source": "aphrodite", "target": "gguf", "label": "supports", "description": "Aphrodite supports GGUF alongside its native safetensors-based formats." },
+    { "source": "powerinfer", "target": "llama-cpp", "label": "forks", "description": "PowerInfer is a llama.cpp fork that adds sparse heterogeneous GPU-CPU inference via neuron activation prediction." },
+    { "source": "powerinfer", "target": "strix-halo", "label": "benefits from unified memory", "description": "PowerInfer's GPU-CPU hybrid approach is especially effective on unified memory where hot/cold neuron placement has zero transfer overhead." },
+    { "source": "mlc-llm", "target": "vulkan", "label": "supports", "description": "MLC LLM compiles models to Vulkan for cross-platform GPU inference, relevant for Strix Halo's RDNA 3.5." },
+    { "source": "exl3", "target": "exllamav2", "label": "successor format for", "description": "EXL3 is the next-generation quantization format from turboderp, replacing EXL2 with QTIP-based trellis encoding for dramatically better quality at low bit widths." },
+    { "source": "lm-studio", "target": "vulkan", "label": "supports", "description": "LM Studio supports Vulkan offloading, outperforming Ollama on integrated GPUs like Strix Halo's RDNA 3.5." },
+    { "source": "sglang", "target": "rocm", "label": "supports", "description": "SGLang supports AMD ROCm for GPU inference, including MI300X/MI325X data center GPUs." }
   ]
 }
