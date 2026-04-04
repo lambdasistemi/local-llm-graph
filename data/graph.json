@@ -1,6 +1,170 @@
 {
   "nodes": [
     {
+      "id": "llm",
+      "label": "Large Language Model (LLM)",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "A neural network trained on massive text corpora to predict the next token in a sequence. LLMs can generate code, answer questions, reason about problems, and follow instructions. They range from 1B to 1T+ parameters. Running them locally means the model weights and computation stay on your machine — no data leaves, no API costs, no rate limits. The tradeoff is hardware requirements: a 70B model at 16-bit precision needs ~140GB of memory.",
+      "links": [
+        { "label": "Wikipedia: LLM", "url": "https://en.wikipedia.org/wiki/Large_language_model" },
+        { "label": "Illustrated Transformer", "url": "https://jalammar.github.io/illustrated-transformer/" }
+      ]
+    },
+    {
+      "id": "transformer",
+      "label": "Transformer Architecture",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "The neural network architecture behind all modern LLMs, introduced in the 2017 'Attention Is All You Need' paper. Key innovation: self-attention lets every token attend to every other token, enabling the model to capture long-range dependencies. The architecture consists of stacked layers, each with multi-head attention and feed-forward networks. Model size is measured in parameters — the learnable weights in these layers.",
+      "links": [
+        { "label": "Attention Is All You Need (paper)", "url": "https://arxiv.org/abs/1706.03762" },
+        { "label": "The Illustrated Transformer", "url": "https://jalammar.github.io/illustrated-transformer/" }
+      ]
+    },
+    {
+      "id": "parameters",
+      "label": "Parameters",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "The learnable weights in a neural network. A '70B model' has 70 billion parameters. Each parameter is typically stored as a 16-bit floating point number (2 bytes), so a 70B model needs ~140GB in full precision. Quantization reduces bits per parameter (e.g., 4-bit = 0.5 bytes), cutting memory requirements dramatically: that 70B model drops to ~42GB at 4-bit.",
+      "links": [
+        { "label": "Model Size Calculator", "url": "https://huggingface.co/spaces/NyxKrage/LLM-Model-VRAM-Calculator" }
+      ]
+    },
+    {
+      "id": "quantization",
+      "label": "Quantization",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "The process of reducing the precision of model weights from high-precision (FP16/FP32) to lower-precision (INT8, INT4, FP8, FP4). This shrinks memory usage and speeds up inference at the cost of some quality. Modern quantization methods (GGUF K-quants, AWQ, GPTQ) lose remarkably little quality — a 4-bit model typically retains 90-95% of the full-precision quality. The key tradeoff: bits per weight vs quality vs speed.",
+      "links": [
+        { "label": "HuggingFace Quantization Guide", "url": "https://huggingface.co/docs/optimum/en/concept_guides/quantization" },
+        { "label": "Quantization Methods Compared (2026)", "url": "https://ai.rs/ai-developer/quantization-methods-compared" }
+      ]
+    },
+    {
+      "id": "inference",
+      "label": "Inference",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "Running a trained model to generate output (as opposed to training it). Local LLM inference has two phases: prefill (processing the input prompt, compute-bound) and decode (generating tokens one by one, memory-bandwidth-bound). Decode speed is measured in tokens per second (tok/s). On consumer hardware, expect 5-30 tok/s depending on model size and quantization.",
+      "links": [
+        { "label": "LLM Inference Explained", "url": "https://www.databricks.com/glossary/llm-inference" }
+      ]
+    },
+    {
+      "id": "context-window",
+      "label": "Context Window",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "The maximum number of tokens a model can process in a single request — input plus output. Measured in tokens (roughly 0.75 words each). Modern models range from 8K to 256K+ tokens. Longer context requires more memory for the KV cache (key-value pairs stored during attention). On 128GB hardware, a 70B model at 4-bit can practically use ~80-100K tokens before memory runs out.",
+      "links": [
+        { "label": "KV Cache Explained", "url": "https://www.scaleway.com/en/blog/understanding-kv-cache-the-backbone-of-llm-efficiency/" }
+      ]
+    },
+    {
+      "id": "kv-cache",
+      "label": "KV Cache",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "During inference, the model stores key and value tensors from its attention layers for all previously processed tokens. This avoids recomputing them for each new token but grows linearly with context length. A 70B model at 128K context can use 20-40GB just for KV cache. KV cache quantization (Q4/Q8 KV in llama.cpp) dramatically reduces this overhead — a key optimization for long-context local inference.",
+      "links": [
+        { "label": "KV Cache in LLMs", "url": "https://www.scaleway.com/en/blog/understanding-kv-cache-the-backbone-of-llm-efficiency/" }
+      ]
+    },
+    {
+      "id": "moe",
+      "label": "Mixture of Experts (MoE)",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "An architecture where only a subset of parameters (experts) are active for each token. Mixtral 8x22B has 141B total but only 39B active per token; Qwen3-Coder-Next has 80B total but only 3B active. MoE models give better quality per compute, but ALL parameters must fit in memory even though only some are used. Unified memory (like Strix Halo) is ideal — no PCIe bottleneck for accessing the dormant experts.",
+      "links": [
+        { "label": "HuggingFace MoE Guide", "url": "https://huggingface.co/blog/moe" }
+      ]
+    },
+    {
+      "id": "gpu",
+      "label": "GPU (Graphics Processing Unit)",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "Massively parallel processors originally for graphics, now essential for AI. GPUs excel at matrix multiplication — the core operation in transformer inference. Key specs: VRAM (how much model fits), memory bandwidth (determines tok/s), and compute (TFLOPS, determines prefill speed). Discrete GPUs (NVIDIA RTX, AMD Radeon) have dedicated VRAM; integrated GPUs (like Strix Halo) share system memory.",
+      "links": [
+        { "label": "Why GPUs for AI", "url": "https://blogs.nvidia.com/blog/why-gpus-are-great-for-ai/" }
+      ]
+    },
+    {
+      "id": "vram",
+      "label": "VRAM / Unified Memory",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "The memory available to the GPU for storing model weights and KV cache. Discrete GPUs have dedicated VRAM (typically 8-48GB). Unified memory architectures (Apple Silicon, AMD Strix Halo) share system RAM between CPU and GPU — giving access to 64-128GB+ without PCIe transfer bottlenecks. This is the single most important spec for local LLMs: it determines the largest model you can run.",
+      "links": [
+        { "label": "LLM VRAM Calculator", "url": "https://huggingface.co/spaces/NyxKrage/LLM-Model-VRAM-Calculator" }
+      ]
+    },
+    {
+      "id": "memory-bandwidth",
+      "label": "Memory Bandwidth",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "The rate at which data can be read from memory, measured in GB/s. This is the bottleneck for token generation (decode phase): each token requires reading all model weights once. A 70B model at 4-bit (42GB) on Strix Halo (~215 GB/s) generates ~5 tok/s (215/42). Discrete GPUs have higher bandwidth (NVIDIA RTX 4090: ~1TB/s) but less memory (24GB). The unified memory tradeoff: more capacity, lower bandwidth.",
+      "links": [
+        { "label": "Memory Bandwidth in LLM Inference", "url": "https://finbarr.ca/how-is-llama-cpp-possible/" }
+      ]
+    },
+    {
+      "id": "cuda",
+      "label": "CUDA",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "NVIDIA's proprietary parallel computing platform. The dominant ecosystem for AI/ML. Most inference engines (vLLM, TensorRT-LLM, ExLlamaV2) are CUDA-first. Tensor Cores provide hardware-accelerated matrix multiplication in FP16/INT8/FP8/FP4. Not available on AMD hardware — AMD users use ROCm or Vulkan instead.",
+      "links": [
+        { "label": "CUDA Zone", "url": "https://developer.nvidia.com/cuda-zone" }
+      ]
+    },
+    {
+      "id": "npu",
+      "label": "NPU (Neural Processing Unit)",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "Dedicated AI accelerator built into modern CPUs/SoCs. Optimized for neural network operations at low power. AMD's XDNA 2 in Strix Halo provides 50 TOPS. NPUs are efficient for smaller models and prompt prefill, but lack the memory bandwidth of GPUs for large-model token generation. Still early days for LLM inference on NPUs — Lemonade and FastFlowLM are pioneering this space.",
+      "links": [
+        { "label": "What is an NPU?", "url": "https://www.qualcomm.com/news/onq/2024/07/what-is-an-npu-and-what-does-it-mean-for-the-ai-pc" }
+      ]
+    },
+    {
+      "id": "tool-calling",
+      "label": "Tool Calling / Function Calling",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "The ability of an LLM to invoke external tools (read files, run commands, search code) during a conversation. Critical for coding assistants like Claude Code. The model outputs structured JSON describing which function to call and with what arguments. Not all local models support it reliably — tool calling requires strong instruction following and correct JSON generation. Qwen3-Coder-Next and Devstral 2 have the best local tool calling support.",
+      "links": [
+        { "label": "Anthropic Tool Use Guide", "url": "https://docs.anthropic.com/en/docs/build-with-claude/tool-use" }
+      ]
+    },
+    {
+      "id": "tokens",
+      "label": "Tokens",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "The basic units of text that LLMs process. Text is split into tokens by a tokenizer — roughly 1 token per 0.75 English words, though code is often denser (more tokens per line). A 128K context window means 128,000 tokens. Inference speed is measured in tokens per second (tok/s). API pricing is per token (input and output counted separately).",
+      "links": [
+        { "label": "OpenAI Tokenizer", "url": "https://platform.openai.com/tokenizer" }
+      ]
+    },
+    {
+      "id": "fine-tuning",
+      "label": "Fine-Tuning",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "Adapting a pre-trained model to a specific task or domain by training it further on curated data. DeepSeek-R1 distills are fine-tuned versions of Llama/Qwen with reasoning traces. LoRA (Low-Rank Adaptation) is the most common method — it trains only a small number of additional parameters, making it feasible on consumer hardware. Unsloth provides optimized fine-tuning tools.",
+      "links": [
+        { "label": "LoRA Paper", "url": "https://arxiv.org/abs/2106.09685" },
+        { "label": "Unsloth Fine-Tuning", "url": "https://unsloth.ai" }
+      ]
+    },
+    {
       "id": "strix-halo",
       "label": "AMD Strix Halo",
       "kind": "hardware",
@@ -619,6 +783,36 @@
     { "source": "mlc-llm", "target": "vulkan", "label": "supports", "description": "MLC LLM compiles models to Vulkan for cross-platform GPU inference, relevant for Strix Halo's RDNA 3.5." },
     { "source": "exl3", "target": "exllamav2", "label": "successor format for", "description": "EXL3 is the next-generation quantization format from turboderp, replacing EXL2 with QTIP-based trellis encoding for dramatically better quality at low bit widths." },
     { "source": "lm-studio", "target": "vulkan", "label": "supports", "description": "LM Studio supports Vulkan offloading, outperforming Ollama on integrated GPUs like Strix Halo's RDNA 3.5." },
-    { "source": "sglang", "target": "rocm", "label": "supports", "description": "SGLang supports AMD ROCm for GPU inference, including MI300X/MI325X data center GPUs." }
+    { "source": "sglang", "target": "rocm", "label": "supports", "description": "SGLang supports AMD ROCm for GPU inference, including MI300X/MI325X data center GPUs." },
+    { "source": "llm", "target": "transformer", "label": "built on", "description": "All modern LLMs use the transformer architecture, which enables parallel processing of tokens through self-attention." },
+    { "source": "llm", "target": "parameters", "label": "sized by", "description": "Model capability roughly scales with parameter count. A 70B model is generally more capable than a 7B model, but also needs 10x the memory." },
+    { "source": "llm", "target": "tokens", "label": "processes", "description": "LLMs read and generate text as tokens — sub-word units produced by a tokenizer. Everything is measured in tokens: context length, speed, cost." },
+    { "source": "llm", "target": "inference", "label": "runs via", "description": "Inference is the act of running a trained model to generate output. Local inference means the computation happens on your hardware." },
+    { "source": "inference", "target": "kv-cache", "label": "requires", "description": "During inference, the KV cache stores attention state for all processed tokens. It grows linearly with context length and can consume significant memory." },
+    { "source": "inference", "target": "memory-bandwidth", "label": "bottlenecked by", "description": "Token generation speed is determined by memory bandwidth — each new token requires reading all model weights from memory once." },
+    { "source": "quantization", "target": "parameters", "label": "compresses", "description": "Quantization reduces the bits used to store each parameter: from 16-bit (2 bytes) down to 4-bit (0.5 bytes) or lower, shrinking memory requirements proportionally." },
+    { "source": "gguf", "target": "quantization", "label": "implements", "description": "GGUF is a file format that packages quantized model weights. K-quants (Q2_K to Q8_0) and I-quants are the specific quantization methods it supports." },
+    { "source": "gptq", "target": "quantization", "label": "implements", "description": "GPTQ uses approximate second-order information from calibration data to optimize weight quantization with minimal quality loss." },
+    { "source": "awq", "target": "quantization", "label": "implements", "description": "AWQ identifies and preserves salient weight channels by observing activation patterns during calibration." },
+    { "source": "context-window", "target": "tokens", "label": "measured in", "description": "Context windows are measured in tokens. A 128K context model can process ~96,000 words of input+output in a single request." },
+    { "source": "context-window", "target": "kv-cache", "label": "consumes via", "description": "Longer context means a larger KV cache. At 128K tokens, a 70B model's KV cache can use 20-40GB of memory." },
+    { "source": "gpu", "target": "vram", "label": "has", "description": "GPUs have dedicated or shared memory for storing model weights and KV cache. Discrete GPUs: 8-48GB VRAM. Unified memory: up to 128GB+." },
+    { "source": "gpu", "target": "memory-bandwidth", "label": "provides", "description": "GPU memory bandwidth determines token generation speed. Discrete: 500-1000+ GB/s. Unified (Strix Halo): ~215 GB/s." },
+    { "source": "gpu", "target": "cuda", "label": "NVIDIA uses", "description": "NVIDIA GPUs use CUDA for compute. Most AI inference engines are CUDA-first, giving NVIDIA a software ecosystem advantage." },
+    { "source": "strix-halo", "target": "vram", "label": "128GB unified", "description": "Strix Halo's 128GB LPDDR5X is unified memory — shared between CPU, GPU, and NPU. The key advantage over discrete GPUs for large models." },
+    { "source": "strix-halo", "target": "memory-bandwidth", "label": "~215 GB/s", "description": "Strix Halo achieves ~215 GB/s real-world memory bandwidth. Lower than discrete GPUs but adequate for 5+ tok/s on 70B models." },
+    { "source": "strix-halo", "target": "gpu", "label": "integrates", "description": "Strix Halo integrates an RDNA 3.5 iGPU with 40 compute units — a GPU that shares the system's unified memory pool." },
+    { "source": "xdna-npu", "target": "npu", "label": "is a", "description": "AMD's XDNA 2 is an NPU — a dedicated neural processing unit optimized for AI workloads at low power." },
+    { "source": "moe", "target": "parameters", "label": "has total vs active", "description": "MoE models have many total parameters but activate only a subset per token. Mixtral 8x22B: 141B total, 39B active. More parameters in memory, less compute per token." },
+    { "source": "moe", "target": "vram", "label": "needs full size in", "description": "All MoE parameters must fit in memory even though only a fraction are active per token. Unified memory is ideal — no transfer overhead for dormant experts." },
+    { "source": "mixtral-8x22b", "target": "moe", "label": "uses", "description": "Mixtral 8x22B is an 8-expert MoE model: 141B total parameters, 39B active per token." },
+    { "source": "qwen3-coder-next", "target": "moe", "label": "uses", "description": "Qwen3-Coder-Next is an MoE model with 80B total but only 3B active parameters — excellent efficiency on unified memory." },
+    { "source": "tool-calling", "target": "llm", "label": "extends", "description": "Tool calling gives LLMs the ability to invoke external functions during a conversation, transforming them from text generators into agents." },
+    { "source": "claude-code", "target": "tool-calling", "label": "requires", "description": "Claude Code relies heavily on tool calling — reading files, running commands, editing code. Local models must support it reliably to work with Claude Code." },
+    { "source": "fine-tuning", "target": "llm", "label": "adapts", "description": "Fine-tuning takes a pre-trained LLM and trains it further on specific data. This creates specialized models like code assistants or reasoning models." },
+    { "source": "deepseek-r1-distill-70b", "target": "fine-tuning", "label": "created via", "description": "R1-Distill models are Llama/Qwen base models fine-tuned on DeepSeek R1's chain-of-thought reasoning traces." },
+    { "source": "unsloth", "target": "fine-tuning", "label": "provides tools for", "description": "Unsloth offers optimized fine-tuning tools alongside their GGUF quantizations — enabling users to create custom model variants." },
+    { "source": "vulkan", "target": "gpu", "label": "GPU compute API", "description": "Vulkan is a cross-platform GPU compute API. On AMD hardware without CUDA, Vulkan provides GPU-accelerated inference via the RADV driver." },
+    { "source": "rocm", "target": "gpu", "label": "AMD GPU compute", "description": "ROCm is AMD's open GPU compute platform — their answer to NVIDIA's CUDA. Supports AMD discrete and integrated GPUs." }
   ]
 }

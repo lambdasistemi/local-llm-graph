@@ -10,6 +10,7 @@
     "assistant": { "label": "Coding Assistant", "color": "#f778ba", "shape": "round-octagon" },
     "hardware": { "label": "Hardware / Backend", "color": "#79c0ff", "shape": "barrel" },
     "hub": { "label": "Model Hub / Quantizer", "color": "#e3b341", "shape": "round-pentagon" },
-    "protocol": { "label": "API Protocol", "color": "#8b949e", "shape": "rectangle" }
+    "protocol": { "label": "API Protocol", "color": "#8b949e", "shape": "rectangle" },
+    "concept": { "label": "Concept", "color": "#56d364", "shape": "star" }
   }
 }

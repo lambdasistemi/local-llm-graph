@@ -1,0 +1,49 @@
+{
+  "id": "llm-fundamentals",
+  "title": "LLM Fundamentals",
+  "description": "What are LLMs, how do they work, and what does it take to run one locally?",
+  "stops": [
+    {
+      "node": "llm",
+      "depth": 1,
+      "title": "What Is an LLM?",
+      "narrative": "A [Large Language Model](node:llm) is a neural network trained on massive text corpora to predict the next [token](node:tokens) in a sequence. That simple objective — next-token prediction — produces surprisingly capable systems that can write code, reason about problems, and follow complex instructions.\n\nLLMs are built on the [Transformer](node:transformer) architecture and their capability roughly scales with [parameter count](node:parameters). Running them locally means all computation stays on your machine — no data leaves, no API costs, no rate limits."
+    },
+    {
+      "node": "parameters",
+      "depth": 2,
+      "title": "Parameters and Memory",
+      "narrative": "[Parameters](node:parameters) are the learnable weights in the neural network — the 'knowledge' the model acquired during training. A 70B model has 70 billion of them.\n\nEach parameter is stored as a number. At full precision (FP16), each takes 2 bytes. So a 70B model needs ~140GB just for weights. This is why [quantization](node:quantization) is essential for local inference — it compresses parameters to 4-8 bits each, cutting memory by 2-4x.\n\n[VRAM](node:vram) (or unified memory) is the critical constraint: it determines the largest model you can fit."
+    },
+    {
+      "node": "quantization",
+      "depth": 2,
+      "title": "Quantization: Making Models Fit",
+      "narrative": "[Quantization](node:quantization) reduces the precision of each [parameter](node:parameters). Instead of 16 bits per weight, you use 4-8 bits. A 70B model goes from ~140GB to ~42GB at 4-bit.\n\nThe key formats:\n- [GGUF](node:gguf) — the standard for desktop inference ([llama.cpp](node:llama-cpp), [Ollama](node:ollama)). K-quants (Q4_K_M, Q5_K_M, etc.) offer the best quality-per-bit.\n- [GPTQ](node:gptq) / [AWQ](node:awq) — GPU-optimized formats used by [vLLM](node:vllm) and production servers.\n- [EXL2](node:exl2) / [EXL3](node:exl3) — per-layer mixed precision, highest quality at extreme compression.\n\nModern 4-bit models retain 90-95% of full-precision quality."
+    },
+    {
+      "node": "inference",
+      "depth": 2,
+      "title": "How Inference Works",
+      "narrative": "[Inference](node:inference) is running the model to generate output. It has two phases:\n\n**Prefill**: Processing your input prompt. This is compute-bound — the [GPU](node:gpu) crunches through all input tokens in parallel. Fast on GPUs with high TFLOPS.\n\n**Decode**: Generating tokens one by one. This is [memory-bandwidth](node:memory-bandwidth) bound — each new token requires reading ALL model weights from memory. On [Strix Halo](node:strix-halo) (~215 GB/s), a 42GB model generates at ~5 tok/s.\n\nThe [KV cache](node:kv-cache) stores attention state and grows with [context length](node:context-window), adding to memory pressure."
+    },
+    {
+      "node": "gpu",
+      "depth": 2,
+      "title": "GPU, VRAM, and Bandwidth",
+      "narrative": "[GPUs](node:gpu) are essential for LLM inference because they excel at matrix multiplication — the core operation in [transformers](node:transformer).\n\nThree specs matter:\n- **[VRAM](node:vram)**: How much model fits. Discrete GPUs: 8-48GB. Unified memory ([Strix Halo](node:strix-halo)): 128GB.\n- **[Memory bandwidth](node:memory-bandwidth)**: Determines tok/s during decode. Discrete: 500-1000+ GB/s. Unified: ~215 GB/s.\n- **Compute (TFLOPS)**: Determines prefill speed.\n\nNVIDIA dominates with [CUDA](node:cuda). AMD users rely on [Vulkan](node:vulkan) or [ROCm](node:rocm). [NPUs](node:npu) are a new option for efficient smaller-model inference."
+    },
+    {
+      "node": "moe",
+      "depth": 2,
+      "title": "Mixture of Experts: More Brain, Less Compute",
+      "narrative": "[Mixture of Experts](node:moe) is an architecture trick: the model has many [parameters](node:parameters) but only activates a subset for each [token](node:tokens). [Qwen3-Coder-Next](node:qwen3-coder-next) has 80B total but only 3B active — it reasons like a much larger model while computing like a small one.\n\nThe catch: ALL parameters must fit in [VRAM](node:vram). This is where unified memory shines — on [Strix Halo](node:strix-halo), the dormant experts sit in the same memory pool with zero transfer overhead."
+    },
+    {
+      "node": "tool-calling",
+      "depth": 2,
+      "title": "Tool Calling: From Text to Action",
+      "narrative": "[Tool calling](node:tool-calling) transforms an [LLM](node:llm) from a text generator into an agent. The model outputs structured JSON describing which function to call — read a file, run a test, edit code. [Claude Code](node:claude-code) relies heavily on this.\n\nNot all local models support tool calling reliably. It requires strong instruction following and consistent JSON generation. [Qwen3-Coder-Next](node:qwen3-coder-next) and [Devstral 2](node:devstral-2) have the best support among open models. This is the main gap between local and cloud models today."
+    }
+  ]
+}
