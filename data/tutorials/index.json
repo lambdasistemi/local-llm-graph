@@ -1,5 +1,11 @@
 [
   {
+    "id": "llm-fundamentals",
+    "title": "LLM Fundamentals",
+    "description": "What are LLMs, how do they work, and what does it take to run one locally?",
+    "file": "data/tutorials/llm-fundamentals.json"
+  },
+  {
     "id": "strix-halo-setup",
     "title": "Setting Up Strix Halo for Local LLMs",
     "description": "From hardware to running your first model — the complete path.",
