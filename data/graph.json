@@ -225,6 +225,53 @@
       ]
     },
     {
+      "id": "self-attention",
+      "label": "Self-Attention",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "The mechanism that lets each token look at every other token in the sequence to decide what's relevant. For each token, the model computes Query, Key, and Value vectors. Attention scores are Q·Kᵀ — how much each token should attend to each other. The output is a weighted sum of Values. This is where the KV cache comes from: Keys and Values are stored so they don't need recomputing for each new token. Computational cost scales quadratically with sequence length (O(n²)), which is why long context is expensive.",
+      "links": [
+        {
+          "label": "The Annotated Transformer",
+          "url": "https://nlp.seas.harvard.edu/annotated-transformer/"
+        },
+        {
+          "label": "Attention Mechanism Visualized",
+          "url": "https://jalammar.github.io/illustrated-transformer/"
+        }
+      ]
+    },
+    {
+      "id": "positional-encoding",
+      "label": "Positional Encoding",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "Transformers process all tokens in parallel — unlike RNNs, they have no inherent notion of order. Positional encodings inject sequence position information. The original paper used fixed sinusoidal functions. Modern LLMs use Rotary Position Embeddings (RoPE), which encode relative positions and can be extended beyond training length using techniques like YaRN (Yet another RoPE extensioN). This is why some models can extrapolate to longer contexts than they were trained on — Qwen3-Coder-Next extends from 256K native to 1M with YaRN.",
+      "links": [
+        {
+          "label": "RoPE Paper",
+          "url": "https://arxiv.org/abs/2104.09864"
+        },
+        {
+          "label": "YaRN Paper",
+          "url": "https://arxiv.org/abs/2309.00071"
+        }
+      ]
+    },
+    {
+      "id": "feed-forward-network",
+      "label": "Feed-Forward Network (FFN)",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "The second major component in each transformer layer, after attention. A two-layer neural network (expand → activate → contract) applied independently to each token position. The FFN is where most of the model's 'knowledge' is stored — factual associations, language patterns, and code idioms live in these weights. FFN parameters typically account for ~2/3 of total model size. In Mixture of Experts models, the single FFN is replaced by multiple expert FFNs with a router choosing which experts to activate per token.",
+      "links": [
+        {
+          "label": "Transformer Feed-Forward Layers Are Key-Value Memories",
+          "url": "https://arxiv.org/abs/2012.14913"
+        }
+      ]
+    },
+    {
       "id": "strix-halo",
       "label": "AMD Strix Halo",
       "kind": "hardware",
@@ -1683,6 +1730,54 @@
       "target": "tool-calling",
       "label": "requires",
       "description": "Gemini CLI uses tool calling for file operations and shell commands. Local models need reliable function calling support."
+    },
+    {
+      "source": "transformer",
+      "target": "self-attention",
+      "label": "core mechanism",
+      "description": "Self-attention is the defining innovation of the transformer. Each layer applies multi-head self-attention, letting every token attend to every other token in the sequence."
+    },
+    {
+      "source": "transformer",
+      "target": "feed-forward-network",
+      "label": "contains per layer",
+      "description": "Each transformer layer has two sub-layers: multi-head self-attention followed by a feed-forward network. The FFN processes each token independently and stores learned knowledge, accounting for ~2/3 of parameters."
+    },
+    {
+      "source": "transformer",
+      "target": "positional-encoding",
+      "label": "encodes order via",
+      "description": "Since transformers process tokens in parallel with no inherent notion of sequence order, positional encodings are added to give the model information about where each token sits in the sequence."
+    },
+    {
+      "source": "self-attention",
+      "target": "kv-cache",
+      "label": "produces",
+      "description": "Self-attention computes Key and Value vectors for each token. These are cached (the KV cache) so that generating each new token only requires computing its Query, not reprocessing the entire sequence."
+    },
+    {
+      "source": "self-attention",
+      "target": "context-window",
+      "label": "cost scales with",
+      "description": "Self-attention has O(n²) computational cost in sequence length. This quadratic scaling is a fundamental reason why very long context windows are expensive in both compute and memory."
+    },
+    {
+      "source": "self-attention",
+      "target": "memory-bandwidth",
+      "label": "demands",
+      "description": "During token generation, self-attention must read all cached Keys and Values from memory for each new token. This makes memory bandwidth the bottleneck for decode speed, the same reason tok/s correlates directly with GB/s."
+    },
+    {
+      "source": "moe",
+      "target": "feed-forward-network",
+      "label": "replaces with experts",
+      "description": "In MoE architectures, each transformer layer's single FFN is replaced by multiple expert FFNs. A learned router selects which experts process each token — this is why MoE models have many total parameters but few active ones."
+    },
+    {
+      "source": "positional-encoding",
+      "target": "context-window",
+      "label": "determines limits of",
+      "description": "The positional encoding scheme determines how well a model generalizes to sequence lengths beyond its training data. RoPE with YaRN extension allows models trained at 256K to extrapolate to 1M tokens."
     }
   ]
 }
