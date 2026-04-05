@@ -7,8 +7,14 @@
       "group": "concepts",
       "description": "A neural network trained on massive text corpora to predict the next token in a sequence. LLMs can generate code, answer questions, reason about problems, and follow instructions. They range from 1B to 1T+ parameters. Running them locally means the model weights and computation stay on your machine — no data leaves, no API costs, no rate limits. The tradeoff is hardware requirements: a 70B model at 16-bit precision needs ~140GB of memory.",
       "links": [
-        { "label": "Wikipedia: LLM", "url": "https://en.wikipedia.org/wiki/Large_language_model" },
-        { "label": "Illustrated Transformer", "url": "https://jalammar.github.io/illustrated-transformer/" }
+        {
+          "label": "Wikipedia: LLM",
+          "url": "https://en.wikipedia.org/wiki/Large_language_model"
+        },
+        {
+          "label": "Illustrated Transformer",
+          "url": "https://jalammar.github.io/illustrated-transformer/"
+        }
       ]
     },
     {
@@ -18,8 +24,14 @@
       "group": "concepts",
       "description": "The neural network architecture behind all modern LLMs, introduced in the 2017 'Attention Is All You Need' paper. Key innovation: self-attention lets every token attend to every other token, enabling the model to capture long-range dependencies. The architecture consists of stacked layers, each with multi-head attention and feed-forward networks. Model size is measured in parameters — the learnable weights in these layers.",
       "links": [
-        { "label": "Attention Is All You Need (paper)", "url": "https://arxiv.org/abs/1706.03762" },
-        { "label": "The Illustrated Transformer", "url": "https://jalammar.github.io/illustrated-transformer/" }
+        {
+          "label": "Attention Is All You Need (paper)",
+          "url": "https://arxiv.org/abs/1706.03762"
+        },
+        {
+          "label": "The Illustrated Transformer",
+          "url": "https://jalammar.github.io/illustrated-transformer/"
+        }
       ]
     },
     {
@@ -29,7 +41,10 @@
       "group": "concepts",
       "description": "The learnable weights in a neural network. A '70B model' has 70 billion parameters. Each parameter is typically stored as a 16-bit floating point number (2 bytes), so a 70B model needs ~140GB in full precision. Quantization reduces bits per parameter (e.g., 4-bit = 0.5 bytes), cutting memory requirements dramatically: that 70B model drops to ~42GB at 4-bit.",
       "links": [
-        { "label": "Model Size Calculator", "url": "https://huggingface.co/spaces/NyxKrage/LLM-Model-VRAM-Calculator" }
+        {
+          "label": "Model Size Calculator",
+          "url": "https://huggingface.co/spaces/NyxKrage/LLM-Model-VRAM-Calculator"
+        }
       ]
     },
     {
@@ -39,8 +54,14 @@
       "group": "concepts",
       "description": "The process of reducing the precision of model weights from high-precision (FP16/FP32) to lower-precision (INT8, INT4, FP8, FP4). This shrinks memory usage and speeds up inference at the cost of some quality. Modern quantization methods (GGUF K-quants, AWQ, GPTQ) lose remarkably little quality — a 4-bit model typically retains 90-95% of the full-precision quality. The key tradeoff: bits per weight vs quality vs speed.",
       "links": [
-        { "label": "HuggingFace Quantization Guide", "url": "https://huggingface.co/docs/optimum/en/concept_guides/quantization" },
-        { "label": "Quantization Methods Compared (2026)", "url": "https://ai.rs/ai-developer/quantization-methods-compared" }
+        {
+          "label": "HuggingFace Quantization Guide",
+          "url": "https://huggingface.co/docs/optimum/en/concept_guides/quantization"
+        },
+        {
+          "label": "Quantization Methods Compared (2026)",
+          "url": "https://ai.rs/ai-developer/quantization-methods-compared"
+        }
       ]
     },
     {
@@ -50,7 +71,10 @@
       "group": "concepts",
       "description": "Running a trained model to generate output (as opposed to training it). Local LLM inference has two phases: prefill (processing the input prompt, compute-bound) and decode (generating tokens one by one, memory-bandwidth-bound). Decode speed is measured in tokens per second (tok/s). On consumer hardware, expect 5-30 tok/s depending on model size and quantization.",
       "links": [
-        { "label": "LLM Inference Explained", "url": "https://www.databricks.com/glossary/llm-inference" }
+        {
+          "label": "LLM Inference Explained",
+          "url": "https://www.databricks.com/glossary/llm-inference"
+        }
       ]
     },
     {
@@ -60,7 +84,10 @@
       "group": "concepts",
       "description": "The maximum number of tokens a model can process in a single request — input plus output. Measured in tokens (roughly 0.75 words each). Modern models range from 8K to 256K+ tokens. Longer context requires more memory for the KV cache (key-value pairs stored during attention). On 128GB hardware, a 70B model at 4-bit can practically use ~80-100K tokens before memory runs out.",
       "links": [
-        { "label": "KV Cache Explained", "url": "https://www.scaleway.com/en/blog/understanding-kv-cache-the-backbone-of-llm-efficiency/" }
+        {
+          "label": "KV Cache Explained",
+          "url": "https://www.scaleway.com/en/blog/understanding-kv-cache-the-backbone-of-llm-efficiency/"
+        }
       ]
     },
     {
@@ -70,7 +97,10 @@
       "group": "concepts",
       "description": "During inference, the model stores key and value tensors from its attention layers for all previously processed tokens. This avoids recomputing them for each new token but grows linearly with context length. A 70B model at 128K context can use 20-40GB just for KV cache. KV cache quantization (Q4/Q8 KV in llama.cpp) dramatically reduces this overhead — a key optimization for long-context local inference.",
       "links": [
-        { "label": "KV Cache in LLMs", "url": "https://www.scaleway.com/en/blog/understanding-kv-cache-the-backbone-of-llm-efficiency/" }
+        {
+          "label": "KV Cache in LLMs",
+          "url": "https://www.scaleway.com/en/blog/understanding-kv-cache-the-backbone-of-llm-efficiency/"
+        }
       ]
     },
     {
@@ -80,7 +110,10 @@
       "group": "concepts",
       "description": "An architecture where only a subset of parameters (experts) are active for each token. Mixtral 8x22B has 141B total but only 39B active per token; Qwen3-Coder-Next has 80B total but only 3B active. MoE models give better quality per compute, but ALL parameters must fit in memory even though only some are used. Unified memory (like Strix Halo) is ideal — no PCIe bottleneck for accessing the dormant experts.",
       "links": [
-        { "label": "HuggingFace MoE Guide", "url": "https://huggingface.co/blog/moe" }
+        {
+          "label": "HuggingFace MoE Guide",
+          "url": "https://huggingface.co/blog/moe"
+        }
       ]
     },
     {
@@ -90,7 +123,10 @@
       "group": "concepts",
       "description": "Massively parallel processors originally for graphics, now essential for AI. GPUs excel at matrix multiplication — the core operation in transformer inference. Key specs: VRAM (how much model fits), memory bandwidth (determines tok/s), and compute (TFLOPS, determines prefill speed). Discrete GPUs (NVIDIA RTX, AMD Radeon) have dedicated VRAM; integrated GPUs (like Strix Halo) share system memory.",
       "links": [
-        { "label": "Why GPUs for AI", "url": "https://blogs.nvidia.com/blog/why-gpus-are-great-for-ai/" }
+        {
+          "label": "Why GPUs for AI",
+          "url": "https://blogs.nvidia.com/blog/why-gpus-are-great-for-ai/"
+        }
       ]
     },
     {
@@ -100,7 +136,10 @@
       "group": "concepts",
       "description": "The memory available to the GPU for storing model weights and KV cache. Discrete GPUs have dedicated VRAM (typically 8-48GB). Unified memory architectures (Apple Silicon, AMD Strix Halo) share system RAM between CPU and GPU — giving access to 64-128GB+ without PCIe transfer bottlenecks. This is the single most important spec for local LLMs: it determines the largest model you can run.",
       "links": [
-        { "label": "LLM VRAM Calculator", "url": "https://huggingface.co/spaces/NyxKrage/LLM-Model-VRAM-Calculator" }
+        {
+          "label": "LLM VRAM Calculator",
+          "url": "https://huggingface.co/spaces/NyxKrage/LLM-Model-VRAM-Calculator"
+        }
       ]
     },
     {
@@ -110,7 +149,10 @@
       "group": "concepts",
       "description": "The rate at which data can be read from memory, measured in GB/s. This is the bottleneck for token generation (decode phase): each token requires reading all model weights once. A 70B model at 4-bit (42GB) on Strix Halo (~215 GB/s) generates ~5 tok/s (215/42). Discrete GPUs have higher bandwidth (NVIDIA RTX 4090: ~1TB/s) but less memory (24GB). The unified memory tradeoff: more capacity, lower bandwidth.",
       "links": [
-        { "label": "Memory Bandwidth in LLM Inference", "url": "https://finbarr.ca/how-is-llama-cpp-possible/" }
+        {
+          "label": "Memory Bandwidth in LLM Inference",
+          "url": "https://finbarr.ca/how-is-llama-cpp-possible/"
+        }
       ]
     },
     {
@@ -120,7 +162,10 @@
       "group": "concepts",
       "description": "NVIDIA's proprietary parallel computing platform. The dominant ecosystem for AI/ML. Most inference engines (vLLM, TensorRT-LLM, ExLlamaV2) are CUDA-first. Tensor Cores provide hardware-accelerated matrix multiplication in FP16/INT8/FP8/FP4. Not available on AMD hardware — AMD users use ROCm or Vulkan instead.",
       "links": [
-        { "label": "CUDA Zone", "url": "https://developer.nvidia.com/cuda-zone" }
+        {
+          "label": "CUDA Zone",
+          "url": "https://developer.nvidia.com/cuda-zone"
+        }
       ]
     },
     {
@@ -130,7 +175,10 @@
       "group": "concepts",
       "description": "Dedicated AI accelerator built into modern CPUs/SoCs. Optimized for neural network operations at low power. AMD's XDNA 2 in Strix Halo provides 50 TOPS. NPUs are efficient for smaller models and prompt prefill, but lack the memory bandwidth of GPUs for large-model token generation. Still early days for LLM inference on NPUs — Lemonade and FastFlowLM are pioneering this space.",
       "links": [
-        { "label": "What is an NPU?", "url": "https://www.qualcomm.com/news/onq/2024/07/what-is-an-npu-and-what-does-it-mean-for-the-ai-pc" }
+        {
+          "label": "What is an NPU?",
+          "url": "https://www.qualcomm.com/news/onq/2024/07/what-is-an-npu-and-what-does-it-mean-for-the-ai-pc"
+        }
       ]
     },
     {
@@ -140,7 +188,10 @@
       "group": "concepts",
       "description": "The ability of an LLM to invoke external tools (read files, run commands, search code) during a conversation. Critical for coding assistants like Claude Code. The model outputs structured JSON describing which function to call and with what arguments. Not all local models support it reliably — tool calling requires strong instruction following and correct JSON generation. Qwen3-Coder-Next and Devstral 2 have the best local tool calling support.",
       "links": [
-        { "label": "Anthropic Tool Use Guide", "url": "https://docs.anthropic.com/en/docs/build-with-claude/tool-use" }
+        {
+          "label": "Anthropic Tool Use Guide",
+          "url": "https://docs.anthropic.com/en/docs/build-with-claude/tool-use"
+        }
       ]
     },
     {
@@ -150,7 +201,10 @@
       "group": "concepts",
       "description": "The basic units of text that LLMs process. Text is split into tokens by a tokenizer — roughly 1 token per 0.75 English words, though code is often denser (more tokens per line). A 128K context window means 128,000 tokens. Inference speed is measured in tokens per second (tok/s). API pricing is per token (input and output counted separately).",
       "links": [
-        { "label": "OpenAI Tokenizer", "url": "https://platform.openai.com/tokenizer" }
+        {
+          "label": "OpenAI Tokenizer",
+          "url": "https://platform.openai.com/tokenizer"
+        }
       ]
     },
     {
@@ -160,8 +214,14 @@
       "group": "concepts",
       "description": "Adapting a pre-trained model to a specific task or domain by training it further on curated data. DeepSeek-R1 distills are fine-tuned versions of Llama/Qwen with reasoning traces. LoRA (Low-Rank Adaptation) is the most common method — it trains only a small number of additional parameters, making it feasible on consumer hardware. Unsloth provides optimized fine-tuning tools.",
       "links": [
-        { "label": "LoRA Paper", "url": "https://arxiv.org/abs/2106.09685" },
-        { "label": "Unsloth Fine-Tuning", "url": "https://unsloth.ai" }
+        {
+          "label": "LoRA Paper",
+          "url": "https://arxiv.org/abs/2106.09685"
+        },
+        {
+          "label": "Unsloth Fine-Tuning",
+          "url": "https://unsloth.ai"
+        }
       ]
     },
     {
@@ -171,8 +231,14 @@
       "group": "hardware",
       "description": "AMD Ryzen AI Max+ 395 APU with 16 Zen 5 cores, 40 RDNA 3.5 CUs (Radeon 8060S iGPU), and XDNA 2 NPU at 50 TOPS. Supports up to 128GB LPDDR5X-8000 unified memory at ~215 GB/s. The unified memory architecture means GPU and CPU share the same pool — models loaded in RAM are directly accessible by GPU compute units, enabling 70B+ parameter models that discrete GPUs cannot fit.",
       "links": [
-        { "label": "AMD Product Page", "url": "https://www.amd.com/en/products/processors/laptop/ryzen/ai-max-series.html" },
-        { "label": "Strix Halo LLM Testing", "url": "https://github.com/lhl/strix-halo-testing" }
+        {
+          "label": "AMD Product Page",
+          "url": "https://www.amd.com/en/products/processors/laptop/ryzen/ai-max-series.html"
+        },
+        {
+          "label": "Strix Halo LLM Testing",
+          "url": "https://github.com/lhl/strix-halo-testing"
+        }
       ]
     },
     {
@@ -182,7 +248,10 @@
       "group": "hardware",
       "description": "GPU compute API via the RADV open-source driver. Currently faster than ROCm on Strix Halo for both prompt processing and token generation, and much easier to set up. The recommended backend for llama.cpp on Strix Halo as of early 2026.",
       "links": [
-        { "label": "Vulkan GPU Inference", "url": "https://github.com/ggml-org/llama.cpp/blob/master/docs/backend/VULKAN.md" }
+        {
+          "label": "Vulkan GPU Inference",
+          "url": "https://github.com/ggml-org/llama.cpp/blob/master/docs/backend/VULKAN.md"
+        }
       ]
     },
     {
@@ -192,8 +261,14 @@
       "group": "hardware",
       "description": "AMD's open GPU compute platform. ROCm 7.x has performance regressions on Strix Halo — HIP barely outperforms CPU for prompt processing, with regressions at high context sizes. Workaround: compiler flag -mllvm --amdgpu-unroll-threshold-local=600. KV cache may get dumped to shared memory instead of VRAM. Flash attention (-fa 1) and --no-mmap are mandatory for stable usage.",
       "links": [
-        { "label": "ROCm on Strix Halo (Phoronix)", "url": "https://www.phoronix.com/review/amd-rocm-7-strix-halo" },
-        { "label": "llama.cpp ROCm Discussion", "url": "https://github.com/ggml-org/llama.cpp/discussions/15021" }
+        {
+          "label": "ROCm on Strix Halo (Phoronix)",
+          "url": "https://www.phoronix.com/review/amd-rocm-7-strix-halo"
+        },
+        {
+          "label": "llama.cpp ROCm Discussion",
+          "url": "https://github.com/ggml-org/llama.cpp/discussions/15021"
+        }
       ]
     },
     {
@@ -203,7 +278,10 @@
       "group": "hardware",
       "description": "AMD's neural processing unit at 50 TOPS on Strix Halo. Can handle prompt processing (prefill) for fast time-to-first-token while the iGPU handles token generation (decode). Model support is still limited compared to GPU; the NPU does not have access to the full memory bandwidth. Best for power-efficient inference of smaller models.",
       "links": [
-        { "label": "AMD XDNA Architecture", "url": "https://www.amd.com/en/technologies/xdna.html" }
+        {
+          "label": "AMD XDNA Architecture",
+          "url": "https://www.amd.com/en/technologies/xdna.html"
+        }
       ]
     },
     {
@@ -213,7 +291,10 @@
       "group": "engines",
       "description": "The foundational C/C++ inference engine for running LLMs on consumer hardware. Supports GGUF format, all quantization levels, multiple backends (CUDA, ROCm, Vulkan, Metal, CPU). Features KV cache quantization (Q4/Q8) that dramatically reduces context memory overhead. Includes llama-server for OpenAI-compatible HTTP API. The standard against which all other local inference is measured.",
       "links": [
-        { "label": "GitHub", "url": "https://github.com/ggml-org/llama.cpp" }
+        {
+          "label": "GitHub",
+          "url": "https://github.com/ggml-org/llama.cpp"
+        }
       ]
     },
     {
@@ -223,9 +304,18 @@
       "group": "engines",
       "description": "User-friendly wrapper around llama.cpp with a CLI and REST API. Since v0.14.0 (January 2026), natively supports the Anthropic Messages API — enabling direct connection from Claude Code without a translation proxy. Model library is curated but extensive. Supports AMD GPUs via ROCm and Vulkan. The simplest path to running local models.",
       "links": [
-        { "label": "Website", "url": "https://ollama.com" },
-        { "label": "Ollama + Claude Code", "url": "https://ollama.com/blog/claude" },
-        { "label": "Anthropic API Docs", "url": "https://docs.ollama.com/integrations/claude-code" }
+        {
+          "label": "Website",
+          "url": "https://ollama.com"
+        },
+        {
+          "label": "Ollama + Claude Code",
+          "url": "https://ollama.com/blog/claude"
+        },
+        {
+          "label": "Anthropic API Docs",
+          "url": "https://docs.ollama.com/integrations/claude-code"
+        }
       ]
     },
     {
@@ -235,7 +325,10 @@
       "group": "engines",
       "description": "High-throughput serving engine optimized for batched workloads. Supports PagedAttention for efficient KV cache management, AWQ and GPTQ quantization, continuous batching. OpenAI-compatible API. AMD ROCm support exists but less mature than llama.cpp. Better suited for multi-user server scenarios than single-user desktop inference.",
       "links": [
-        { "label": "GitHub", "url": "https://github.com/vllm-project/vllm" }
+        {
+          "label": "GitHub",
+          "url": "https://github.com/vllm-project/vllm"
+        }
       ]
     },
     {
@@ -245,7 +338,10 @@
       "group": "engines",
       "description": "Desktop GUI application built on llama.cpp. Provides easy model browsing and downloading from HuggingFace, one-click inference, and an OpenAI-compatible local server. Good for experimentation and model evaluation before committing to a production setup.",
       "links": [
-        { "label": "Website", "url": "https://lmstudio.ai" }
+        {
+          "label": "Website",
+          "url": "https://lmstudio.ai"
+        }
       ]
     },
     {
@@ -255,7 +351,10 @@
       "group": "engines",
       "description": "AMD's lightweight native C++ inference service (2MB binary). Exposes OpenAI-compatible API at localhost:13305. Splits workload between NPU (prefill for fast time-to-first-token) and iGPU (decode for bandwidth). Purpose-built for AMD AI PCs including Strix Halo.",
       "links": [
-        { "label": "Documentation", "url": "https://lemonade-server.ai/flm_npu_linux.html" }
+        {
+          "label": "Documentation",
+          "url": "https://lemonade-server.ai/flm_npu_linux.html"
+        }
       ]
     },
     {
@@ -265,7 +364,10 @@
       "group": "engines",
       "description": "Purpose-built inference runtime for AMD NPUs, described as 'like Ollama but for AMD NPUs'. Focuses on leveraging the XDNA NPU for efficient local inference on AMD AI PCs.",
       "links": [
-        { "label": "GitHub", "url": "https://github.com/FastFlowLM/FastFlowLM" }
+        {
+          "label": "GitHub",
+          "url": "https://github.com/FastFlowLM/FastFlowLM"
+        }
       ]
     },
     {
@@ -275,7 +377,10 @@
       "group": "engines",
       "description": "GPU-focused inference engine with flexible per-layer quantization via EXL2 format. Achieves excellent token throughput on NVIDIA GPUs. Less relevant for AMD setups but worth noting for its innovative quantization approach.",
       "links": [
-        { "label": "GitHub", "url": "https://github.com/turboderp/exllamav2" }
+        {
+          "label": "GitHub",
+          "url": "https://github.com/turboderp/exllamav2"
+        }
       ]
     },
     {
@@ -285,7 +390,10 @@
       "group": "engines",
       "description": "Structured generation language and runtime. Excels at constrained decoding (JSON schemas, regex patterns). Supports CUDA and ROCm. Competitive with vLLM for serving workloads, with better structured output performance.",
       "links": [
-        { "label": "GitHub", "url": "https://github.com/sgl-project/sglang" }
+        {
+          "label": "GitHub",
+          "url": "https://github.com/sgl-project/sglang"
+        }
       ]
     },
     {
@@ -295,7 +403,10 @@
       "group": "engines",
       "description": "Single-file executable that bundles a model with the inference engine (based on llama.cpp + Cosmopolitan libc). Runs on any x86-64 or ARM64 OS without installation. Great for distribution and air-gapped deployments.",
       "links": [
-        { "label": "GitHub", "url": "https://github.com/Mozilla-Ocho/llamafile" }
+        {
+          "label": "GitHub",
+          "url": "https://github.com/Mozilla-Ocho/llamafile"
+        }
       ]
     },
     {
@@ -305,7 +416,10 @@
       "group": "quantization",
       "description": "The standard quantization format for llama.cpp and Ollama. Successor to GGML. Supports K-quants (Q2_K through Q8_0), I-quants (IQ1_S through IQ4_XS), and full precision (F16, F32). K-quants offer the best quality-per-bit tradeoff for most use cases. GGUF files are self-contained with model metadata, tokenizer, and weights in a single file.",
       "links": [
-        { "label": "GGUF Format Guide", "url": "https://ggufloader.github.io/what-is-gguf.html" }
+        {
+          "label": "GGUF Format Guide",
+          "url": "https://ggufloader.github.io/what-is-gguf.html"
+        }
       ]
     },
     {
@@ -315,7 +429,10 @@
       "group": "quantization",
       "description": "Post-training quantization method that uses approximate second-order information for weight compression. Typically INT4 or INT8. Requires calibration data. Supported by vLLM, HuggingFace Transformers, AutoGPTQ. More GPU-centric than GGUF — optimized for CUDA tensor cores.",
       "links": [
-        { "label": "Paper", "url": "https://arxiv.org/abs/2210.17323" }
+        {
+          "label": "Paper",
+          "url": "https://arxiv.org/abs/2210.17323"
+        }
       ]
     },
     {
@@ -325,7 +442,10 @@
       "group": "quantization",
       "description": "Activation-aware Weight Quantization. Preserves salient weight channels identified by activation magnitudes. Typically INT4. Supported by vLLM, TensorRT-LLM, HuggingFace. Often slightly better quality than GPTQ at same bit width for instruction-following tasks.",
       "links": [
-        { "label": "Paper", "url": "https://arxiv.org/abs/2306.00978" }
+        {
+          "label": "Paper",
+          "url": "https://arxiv.org/abs/2306.00978"
+        }
       ]
     },
     {
@@ -335,7 +455,10 @@
       "group": "quantization",
       "description": "ExLlamaV2's per-layer mixed-precision format. Allows different quantization bits per layer based on sensitivity analysis. Achieves very good quality at low average bits-per-weight. Exclusive to ExLlamaV2 engine.",
       "links": [
-        { "label": "ExLlamaV2 GitHub", "url": "https://github.com/turboderp/exllamav2" }
+        {
+          "label": "ExLlamaV2 GitHub",
+          "url": "https://github.com/turboderp/exllamav2"
+        }
       ]
     },
     {
@@ -345,7 +468,10 @@
       "group": "quantization",
       "description": "8-bit floating point format (E4M3 or E5M2). Supported natively on NVIDIA Hopper (H100) and Blackwell GPUs. Near-lossless quality compared to FP16. Halves memory vs FP16. Supported by vLLM, TensorRT-LLM, SGLang.",
       "links": [
-        { "label": "NVIDIA FP8 Training", "url": "https://developer.nvidia.com/blog/nvidia-arm-and-intel-publish-fp8-specification-for-standardization-as-an-interchange-format-for-ai/" }
+        {
+          "label": "NVIDIA FP8 Training",
+          "url": "https://developer.nvidia.com/blog/nvidia-arm-and-intel-publish-fp8-specification-for-standardization-as-an-interchange-format-for-ai/"
+        }
       ]
     },
     {
@@ -355,8 +481,14 @@
       "group": "proxies",
       "description": "Open-source proxy that translates between API formats. Sits between Claude Code and local/remote model servers. Provides load balancing, fallbacks, cost tracking, and model routing. Translates Anthropic Messages API to OpenAI-compatible format for backends that don't speak Anthropic natively. Security note: PyPI versions 1.82.7 and 1.82.8 were compromised with credential-stealing malware.",
       "links": [
-        { "label": "Documentation", "url": "https://docs.litellm.ai" },
-        { "label": "Claude Code Tutorial", "url": "https://docs.litellm.ai/docs/tutorials/claude_non_anthropic_models" }
+        {
+          "label": "Documentation",
+          "url": "https://docs.litellm.ai"
+        },
+        {
+          "label": "Claude Code Tutorial",
+          "url": "https://docs.litellm.ai/docs/tutorials/claude_non_anthropic_models"
+        }
       ]
     },
     {
@@ -366,8 +498,14 @@
       "group": "proxies",
       "description": "Go-based proxy specifically designed for Claude Code. Intercepts and routes requests with intelligent model routing based on token count, tool usage, or custom rules. Can connect Claude Code to Ollama, OpenAI, GitHub Copilot, or Claude Pro/Max via OAuth.",
       "links": [
-        { "label": "Website", "url": "https://ccproxy.orchestre.dev/" },
-        { "label": "GitHub", "url": "https://github.com/starbaser/ccproxy" }
+        {
+          "label": "Website",
+          "url": "https://ccproxy.orchestre.dev/"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/starbaser/ccproxy"
+        }
       ]
     },
     {
@@ -385,7 +523,10 @@
       "group": "protocols",
       "description": "The /v1/messages endpoint format that Claude Code speaks natively. Request/response format includes system prompts, multi-turn messages, tool definitions, and streaming. Ollama v0.14.0+ supports this natively. LiteLLM and CCProxy can translate from this to other formats.",
       "links": [
-        { "label": "API Reference", "url": "https://docs.anthropic.com/en/api/messages" }
+        {
+          "label": "API Reference",
+          "url": "https://docs.anthropic.com/en/api/messages"
+        }
       ]
     },
     {
@@ -395,7 +536,10 @@
       "group": "protocols",
       "description": "The /v1/chat/completions endpoint format spoken by most local inference engines (llama.cpp server, vLLM, LM Studio, Lemonade). De facto standard for local model serving. Requires translation layer (LiteLLM, CCProxy) to work with Claude Code.",
       "links": [
-        { "label": "OpenAI API Reference", "url": "https://platform.openai.com/docs/api-reference/chat" }
+        {
+          "label": "OpenAI API Reference",
+          "url": "https://platform.openai.com/docs/api-reference/chat"
+        }
       ]
     },
     {
@@ -405,7 +549,10 @@
       "group": "assistants",
       "description": "Anthropic's official CLI coding assistant. Speaks the Anthropic Messages API. Can be pointed at local models via ANTHROPIC_BASE_URL. Sends a ~16k token system prompt, so local models need 64k+ context. Supports /model for mid-session switching. Tool calling is the main pain point with local models — some engines drop tool call responses during streaming.",
       "links": [
-        { "label": "Documentation", "url": "https://docs.anthropic.com/en/docs/claude-code" }
+        {
+          "label": "Documentation",
+          "url": "https://docs.anthropic.com/en/docs/claude-code"
+        }
       ]
     },
     {
@@ -415,7 +562,10 @@
       "group": "assistants",
       "description": "CLI coding assistant with deep git integration. Supports any OpenAI-compatible endpoint, making it trivially compatible with local models. Features multi-file editing, auto-commits, repository mapping. Strong community and active development. Excellent alternative to Claude Code for local-only workflows.",
       "links": [
-        { "label": "GitHub", "url": "https://github.com/paul-gauthier/aider" }
+        {
+          "label": "GitHub",
+          "url": "https://github.com/paul-gauthier/aider"
+        }
       ]
     },
     {
@@ -425,7 +575,10 @@
       "group": "assistants",
       "description": "VS Code and JetBrains plugin with model-agnostic architecture (~31k GitHub stars). Connects to any model via Ollama, LM Studio, or OpenAI-compatible API. Provides chat, autocomplete, and inline editing. Good for IDE-integrated workflows alongside Claude Code in the terminal.",
       "links": [
-        { "label": "Website", "url": "https://continue.dev" }
+        {
+          "label": "Website",
+          "url": "https://continue.dev"
+        }
       ]
     },
     {
@@ -435,7 +588,10 @@
       "group": "assistants",
       "description": "Self-hosted code completion server (~33k GitHub stars). Runs entirely on your infrastructure with full data governance. Team-oriented with repository indexing. Good for fast inline completions powered by smaller local models while Claude Code handles complex tasks.",
       "links": [
-        { "label": "GitHub", "url": "https://github.com/TabbyML/tabby" }
+        {
+          "label": "GitHub",
+          "url": "https://github.com/TabbyML/tabby"
+        }
       ]
     },
     {
@@ -445,8 +601,14 @@
       "group": "assistants",
       "description": "Leading open-source coding agent framework (64k+ GitHub stars, formerly OpenDevin). Works with any LLM including local models via Ollama. AMD partnership with Lemonade integration for AI PC inference. Open-weight models are within 2.2-6.4% of proprietary models on their benchmarks. Web UI, multi-agent, production-ready.",
       "links": [
-        { "label": "GitHub", "url": "https://github.com/All-Hands-AI/OpenHands" },
-        { "label": "AMD Integration", "url": "https://www.amd.com/en/developer/resources/technical-articles/2025/OpenHands.html" }
+        {
+          "label": "GitHub",
+          "url": "https://github.com/All-Hands-AI/OpenHands"
+        },
+        {
+          "label": "AMD Integration",
+          "url": "https://www.amd.com/en/developer/resources/technical-articles/2025/OpenHands.html"
+        }
       ]
     },
     {
@@ -456,7 +618,10 @@
       "group": "code-models",
       "description": "Alibaba's flagship open code model. 32B parameters, 128K context. Matches or exceeds GPT-4o on HumanEval (~92%), MBPP (~85%). At Q8_0 uses ~34GB — near-lossless quality with room for full 128K context on 128GB hardware. The sweet spot for local code generation.",
       "links": [
-        { "label": "HuggingFace", "url": "https://huggingface.co/Qwen/Qwen2.5-Coder-32B-Instruct" }
+        {
+          "label": "HuggingFace",
+          "url": "https://huggingface.co/Qwen/Qwen2.5-Coder-32B-Instruct"
+        }
       ]
     },
     {
@@ -466,8 +631,14 @@
       "group": "code-models",
       "description": "80B MoE model with only 3B active parameters. 256K native context (1M with YaRN). Agentic-trained — comparable to Claude Sonnet on coding benchmarks. Uses ~46GB on unified memory. Excellent performance because only active parameters need bandwidth. Strong tool calling support.",
       "links": [
-        { "label": "HuggingFace", "url": "https://huggingface.co/Qwen/Qwen3-Coder-Next" },
-        { "label": "Blog Post", "url": "https://qwenlm.github.io/blog/qwen3-coder/" }
+        {
+          "label": "HuggingFace",
+          "url": "https://huggingface.co/Qwen/Qwen3-Coder-Next"
+        },
+        {
+          "label": "Blog Post",
+          "url": "https://qwenlm.github.io/blog/qwen3-coder/"
+        }
       ]
     },
     {
@@ -477,7 +648,10 @@
       "group": "code-models",
       "description": "Mistral's 24B coding model. 68.0% on SWE-bench Verified. Apache 2.0 license. Runs on consumer GPUs. Designed for agentic coding workflows (plan/execute/verify). Works with Mistral's Vibe CLI.",
       "links": [
-        { "label": "Mistral Blog", "url": "https://mistral.ai/news/devstral-2-vibe-cli" }
+        {
+          "label": "Mistral Blog",
+          "url": "https://mistral.ai/news/devstral-2-vibe-cli"
+        }
       ]
     },
     {
@@ -487,7 +661,10 @@
       "group": "code-models",
       "description": "Mistral's large 123B coding model. 72.2% on SWE-bench Verified. Modified MIT license. ~75GB at Q4_K_M — fits in 128GB but leaves limited room for context. Best open-source model for complex agentic coding tasks.",
       "links": [
-        { "label": "Mistral Blog", "url": "https://mistral.ai/news/devstral-2-vibe-cli" }
+        {
+          "label": "Mistral Blog",
+          "url": "https://mistral.ai/news/devstral-2-vibe-cli"
+        }
       ]
     },
     {
@@ -497,7 +674,10 @@
       "group": "code-models",
       "description": "Mistral's 22B code model. 32K context. HumanEval ~81%. Strong across many programming languages. ~14GB at Q4_K_M. Efficient and fast. License was initially non-commercial — verify current terms.",
       "links": [
-        { "label": "Mistral", "url": "https://mistral.ai/news/codestral/" }
+        {
+          "label": "Mistral",
+          "url": "https://mistral.ai/news/codestral/"
+        }
       ]
     },
     {
@@ -507,7 +687,10 @@
       "group": "code-models",
       "description": "BigCode/ServiceNow's 15B code model. 16K context. Good for fill-in-the-middle (FIM) and autocomplete — the type of task Tabby and Continue.dev use for inline completions. Outclassed for chat-style coding by newer models.",
       "links": [
-        { "label": "HuggingFace", "url": "https://huggingface.co/bigcode/starcoder2-15b" }
+        {
+          "label": "HuggingFace",
+          "url": "https://huggingface.co/bigcode/starcoder2-15b"
+        }
       ]
     },
     {
@@ -517,7 +700,10 @@
       "group": "general-models",
       "description": "Meta's dense 70B model (December 2024). 128K context. Matches Llama 3.1 405B quality at 70B size. HumanEval ~82%. At Q5_K_M uses ~50GB, Q6_K ~58GB. Strong general-purpose + code capability. One of the best all-round models for 128GB hardware.",
       "links": [
-        { "label": "HuggingFace", "url": "https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct" }
+        {
+          "label": "HuggingFace",
+          "url": "https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct"
+        }
       ]
     },
     {
@@ -527,7 +713,10 @@
       "group": "general-models",
       "description": "Alibaba's top-tier general model. 72B parameters, 128K context with YaRN. HumanEval ~86%. At Q4_K_M uses ~45GB, Q6_K ~60GB. Competitive with GPT-4 on many benchmarks. Excellent for both code and general reasoning.",
       "links": [
-        { "label": "HuggingFace", "url": "https://huggingface.co/Qwen/Qwen2.5-72B-Instruct" }
+        {
+          "label": "HuggingFace",
+          "url": "https://huggingface.co/Qwen/Qwen2.5-72B-Instruct"
+        }
       ]
     },
     {
@@ -537,7 +726,10 @@
       "group": "general-models",
       "description": "Mistral's large MoE model. 141B total, 39B active parameters. 64K context. At Q4_K_M uses ~85GB — fits in 128GB but tight. Good general capability. The MoE architecture gives better quality per active parameter than dense models.",
       "links": [
-        { "label": "HuggingFace", "url": "https://huggingface.co/mistralai/Mixtral-8x22B-Instruct-v0.1" }
+        {
+          "label": "HuggingFace",
+          "url": "https://huggingface.co/mistralai/Mixtral-8x22B-Instruct-v0.1"
+        }
       ]
     },
     {
@@ -547,7 +739,10 @@
       "group": "general-models",
       "description": "Microsoft's compact reasoning model. 14B parameters, 16K context. HumanEval ~82% — remarkable for its size. At Q8_0 uses only ~15GB. Excellent as a fast draft/secondary model. Can run alongside a larger model without memory pressure.",
       "links": [
-        { "label": "HuggingFace", "url": "https://huggingface.co/microsoft/phi-4" }
+        {
+          "label": "HuggingFace",
+          "url": "https://huggingface.co/microsoft/phi-4"
+        }
       ]
     },
     {
@@ -557,7 +752,10 @@
       "group": "general-models",
       "description": "Google's 27B model. Punches above its weight — competitive with Llama 3.1 70B on some tasks. At Q4_K_M uses ~17GB. Limitation: only 8K context, which is restrictive for code tasks requiring large file context.",
       "links": [
-        { "label": "HuggingFace", "url": "https://huggingface.co/google/gemma-2-27b-it" }
+        {
+          "label": "HuggingFace",
+          "url": "https://huggingface.co/google/gemma-2-27b-it"
+        }
       ]
     },
     {
@@ -567,7 +765,10 @@
       "group": "reasoning-models",
       "description": "Llama 3.1 70B fine-tuned with DeepSeek R1's reasoning traces. Produces <think>...</think> blocks with chain-of-thought before answering. At Q5_K_M uses ~50GB. The strongest reasoning model that fits on 128GB hardware. Ideal for architecture decisions and complex debugging.",
       "links": [
-        { "label": "HuggingFace", "url": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-70B" }
+        {
+          "label": "HuggingFace",
+          "url": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-70B"
+        }
       ]
     },
     {
@@ -577,7 +778,10 @@
       "group": "reasoning-models",
       "description": "Qwen 2.5 32B fine-tuned with R1 reasoning traces. Matches or exceeds GPT-4o on math/reasoning tasks. At Q4_K_M uses ~20GB. The efficiency sweet spot for reasoning — fast inference, full 128K context, strong chain-of-thought.",
       "links": [
-        { "label": "HuggingFace", "url": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B" }
+        {
+          "label": "HuggingFace",
+          "url": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B"
+        }
       ]
     },
     {
@@ -587,7 +791,10 @@
       "group": "reasoning-models",
       "description": "Alibaba's reasoning model (March 2025). 32B parameters, 128K context with long chain-of-thought. Competitive with DeepSeek-R1-Distill-Qwen-32B on math/reasoning. At Q4_K_M uses ~20GB. Different reasoning flavor than R1 — worth comparing both.",
       "links": [
-        { "label": "HuggingFace", "url": "https://huggingface.co/Qwen/QwQ-32B" }
+        {
+          "label": "HuggingFace",
+          "url": "https://huggingface.co/Qwen/QwQ-32B"
+        }
       ]
     },
     {
@@ -597,7 +804,10 @@
       "group": "distribution",
       "description": "Primary distribution platform for all open LLMs. All model families publish here. GGUF files hosted directly. Search for model name + 'GGUF' to find quantized versions. Has more quantization variety than the Ollama library.",
       "links": [
-        { "label": "Website", "url": "https://huggingface.co" }
+        {
+          "label": "Website",
+          "url": "https://huggingface.co"
+        }
       ]
     },
     {
@@ -607,7 +817,10 @@
       "group": "distribution",
       "description": "Currently the most active GGUF quantizer on HuggingFace. Covers nearly every new model release within hours. Provides multiple quant levels per model. Experiments with imatrix calibration and has contributed to llama.cpp quantization recipes.",
       "links": [
-        { "label": "HuggingFace Profile", "url": "https://huggingface.co/bartowski" }
+        {
+          "label": "HuggingFace Profile",
+          "url": "https://huggingface.co/bartowski"
+        }
       ]
     },
     {
@@ -617,8 +830,14 @@
       "group": "distribution",
       "description": "Known for Dynamic 2.0 GGUFs — an improved quantization methodology using calibration datasets. Also provides fine-tuning tools. Active competitor to bartowski. Releases 25+ GGUF variants per major model. Dynamic 2.0 works on all models including MoEs.",
       "links": [
-        { "label": "Website", "url": "https://unsloth.ai" },
-        { "label": "Dynamic 2.0 Docs", "url": "https://unsloth.ai/docs/basics/unsloth-dynamic-2.0-ggufs" }
+        {
+          "label": "Website",
+          "url": "https://unsloth.ai"
+        },
+        {
+          "label": "Dynamic 2.0 Docs",
+          "url": "https://unsloth.ai/docs/basics/unsloth-dynamic-2.0-ggufs"
+        }
       ]
     },
     {
@@ -628,8 +847,14 @@
       "group": "engines",
       "description": "Open-source Go-based AI engine. Drop-in replacement for both OpenAI AND Anthropic APIs natively (since v3.10.0). Supports multiple backends: llama.cpp, vLLM, Transformers, ExLlama2. Handles text, image, audio, video, embeddings, TTS, function calling, and constrained grammars. The only engine besides Ollama that speaks Anthropic Messages API natively.",
       "links": [
-        { "label": "Website", "url": "https://localai.io" },
-        { "label": "GitHub", "url": "https://github.com/mudler/LocalAI" }
+        {
+          "label": "Website",
+          "url": "https://localai.io"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/mudler/LocalAI"
+        }
       ]
     },
     {
@@ -639,7 +864,10 @@
       "group": "engines",
       "description": "Single-file llama.cpp fork with integrated web UI. Focused on creative writing and roleplay but fully capable for code. Triple API: KoboldAI + OpenAI + Ollama compatible endpoints. Zero-install single executable with built-in memory and SillyTavern integration.",
       "links": [
-        { "label": "GitHub", "url": "https://github.com/LostRuins/koboldcpp" }
+        {
+          "label": "GitHub",
+          "url": "https://github.com/LostRuins/koboldcpp"
+        }
       ]
     },
     {
@@ -649,7 +877,10 @@
       "group": "engines",
       "description": "vLLM-based engine by PygmalionAI with the broadest quantization support of any engine: AQLM, AWQ, BitNet, bitsandbytes, EETQ, GGUF, GPTQ, QuIP#, EXL2, Marlin, FP2-FP12, NVFP4, MXFP4, and more. OpenAI-compatible API. Context parallelism and dynamic model management. v0.10.0 (Nov 2025).",
       "links": [
-        { "label": "GitHub", "url": "https://github.com/aphrodite-engine/aphrodite-engine" }
+        {
+          "label": "GitHub",
+          "url": "https://github.com/aphrodite-engine/aphrodite-engine"
+        }
       ]
     },
     {
@@ -659,7 +890,10 @@
       "group": "engines",
       "description": "Sparse heterogeneous GPU-CPU inference engine from SJTU-IPADS. Exploits power-law neuron activation: hot neurons on GPU, cold neurons on CPU. Up to 11.69x faster than llama.cpp. 13.20 tok/s on OPT-175B with single RTX 4090 (only 18% below A100). PowerInfer-2 targets smartphones.",
       "links": [
-        { "label": "GitHub", "url": "https://github.com/SJTU-IPADS/PowerInfer" }
+        {
+          "label": "GitHub",
+          "url": "https://github.com/SJTU-IPADS/PowerInfer"
+        }
       ]
     },
     {
@@ -669,7 +903,10 @@
       "group": "engines",
       "description": "Machine learning compiler for universal LLM deployment via Apache TVM. Compiles models to run on CUDA, Vulkan, Metal, WebGPU (in-browser via WebLLM), iOS, Android. ML compilation optimizes per-target. WebLLM enables full in-browser inference with no server.",
       "links": [
-        { "label": "Documentation", "url": "https://llm.mlc.ai/docs/get_started/introduction" }
+        {
+          "label": "Documentation",
+          "url": "https://llm.mlc.ai/docs/get_started/introduction"
+        }
       ]
     },
     {
@@ -679,7 +916,10 @@
       "group": "quantization",
       "description": "ExLlamaV3's next-gen format using QTIP-based Hadamard transforms and trellis encoding on 16x16 Tensor Core tiles. Coherent at 1.6 bits per weight — a 70B model in under 16GB VRAM. Marlin-inspired GEMM kernel approaches memory bandwidth limit at 4 bpw. NVIDIA CUDA only.",
       "links": [
-        { "label": "ExLlamaV3 GitHub", "url": "https://github.com/turboderp-org/exllamav3" }
+        {
+          "label": "ExLlamaV3 GitHub",
+          "url": "https://github.com/turboderp-org/exllamav3"
+        }
       ]
     },
     {
@@ -689,7 +929,10 @@
       "group": "quantization",
       "description": "Additive Quantization of Language Models. Multi-codebook approach dividing weight vectors into sub-vectors approximated by codewords. State-of-the-art quality at 2 bits per weight. Outperforms GPTQ and QuIP# at extreme compression levels.",
       "links": [
-        { "label": "Paper", "url": "https://arxiv.org/abs/2401.06118" }
+        {
+          "label": "Paper",
+          "url": "https://arxiv.org/abs/2401.06118"
+        }
       ]
     },
     {
@@ -699,120 +942,747 @@
       "group": "distribution",
       "description": "Curated model registry with standardized tags (e.g., qwen2.5-coder:32b-instruct-q5_K_M). One-command downloads: 'ollama pull model:tag'. Not every quantization is available — HuggingFace has more variety. But the simplest way to get started.",
       "links": [
-        { "label": "Library", "url": "https://ollama.com/library" }
+        {
+          "label": "Library",
+          "url": "https://ollama.com/library"
+        }
+      ]
+    },
+    {
+      "id": "codex",
+      "label": "Codex CLI",
+      "kind": "assistant",
+      "group": "assistants",
+      "description": "OpenAI's open-source CLI coding assistant (Apache 2.0). Speaks the OpenAI Responses API natively. Can be pointed at local models via OPENAI_BASE_URL or any OpenAI-compatible endpoint. Supports tool calling for file reads, writes, and shell commands. Runs sandboxed by default — commands execute in a restricted environment. Requires models with function calling support for full functionality.",
+      "links": [
+        {
+          "label": "GitHub",
+          "url": "https://github.com/openai/codex"
+        }
+      ]
+    },
+    {
+      "id": "gemini-cli",
+      "label": "Gemini CLI",
+      "kind": "assistant",
+      "group": "assistants",
+      "description": "Google's open-source CLI coding assistant (Apache 2.0). Speaks the Gemini API natively. Can be pointed at local models via OpenAI-compatible endpoints using the --model flag with openai/ prefix. Leverages Gemini's large context windows (up to 1M tokens). Supports tool calling for file operations and shell commands. Includes built-in safety checks and sandboxed execution.",
+      "links": [
+        {
+          "label": "GitHub",
+          "url": "https://github.com/google-gemini/gemini-cli"
+        }
       ]
     }
   ],
   "edges": [
-    { "source": "claude-code", "target": "anthropic-api", "label": "speaks natively", "description": "Claude Code uses the Anthropic Messages API (/v1/messages) for all communication. This is the only protocol it understands." },
-    { "source": "ollama", "target": "anthropic-api", "label": "supports since v0.14", "description": "Since January 2026, Ollama natively serves the Anthropic Messages API, enabling direct connection from Claude Code without a translation proxy." },
-    { "source": "ollama", "target": "openai-api", "label": "supports", "description": "Ollama also serves the OpenAI-compatible /v1/chat/completions endpoint, making it compatible with most coding assistants." },
-    { "source": "ollama", "target": "llama-cpp", "label": "wraps", "description": "Ollama uses llama.cpp as its inference backend, adding model management, a REST API, and a curated model library on top." },
-    { "source": "llama-cpp", "target": "openai-api", "label": "serves via llama-server", "description": "llama-server provides an OpenAI-compatible HTTP API for any GGUF model loaded by llama.cpp." },
-    { "source": "llama-cpp", "target": "gguf", "label": "uses", "description": "GGUF is the native and only format supported by llama.cpp. All quantization levels from Q2_K to F16 are available." },
-    { "source": "llama-cpp", "target": "vulkan", "label": "supports", "description": "Vulkan is currently the fastest backend for llama.cpp on Strix Halo, outperforming ROCm for both prompt processing and token generation." },
-    { "source": "llama-cpp", "target": "rocm", "label": "supports (with issues)", "description": "ROCm/HIP backend works but has performance regressions on Strix Halo. Requires workarounds: flash attention, --no-mmap, compiler flags." },
-    { "source": "vllm", "target": "openai-api", "label": "serves", "description": "vLLM provides an OpenAI-compatible API. Better for batched multi-user serving than single-user desktop inference." },
-    { "source": "vllm", "target": "awq", "label": "supports", "description": "vLLM supports AWQ quantized models for efficient GPU inference." },
-    { "source": "vllm", "target": "gptq", "label": "supports", "description": "vLLM supports GPTQ quantized models." },
-    { "source": "vllm", "target": "fp8", "label": "supports", "description": "vLLM supports FP8 inference on compatible hardware (NVIDIA Hopper/Blackwell)." },
-    { "source": "lm-studio", "target": "llama-cpp", "label": "built on", "description": "LM Studio uses llama.cpp as its inference backend, providing a GUI and model browser on top." },
-    { "source": "lm-studio", "target": "openai-api", "label": "serves", "description": "LM Studio can expose a local OpenAI-compatible server for other tools to connect to." },
-    { "source": "lemonade", "target": "openai-api", "label": "serves", "description": "Lemonade exposes an OpenAI-compatible API at localhost:13305." },
-    { "source": "lemonade", "target": "xdna-npu", "label": "leverages for prefill", "description": "Lemonade uses the XDNA NPU for prompt processing (prefill) to achieve fast time-to-first-token." },
-    { "source": "lemonade", "target": "strix-halo", "label": "optimized for", "description": "Lemonade is AMD's purpose-built inference server for AI PCs including Strix Halo, splitting work between NPU and iGPU." },
-    { "source": "fastflowlm", "target": "xdna-npu", "label": "built for", "description": "FastFlowLM is specifically designed to leverage AMD's XDNA NPU for local inference." },
-    { "source": "exllamav2", "target": "exl2", "label": "uses", "description": "EXL2 is ExLlamaV2's native format with per-layer mixed-precision quantization." },
-    { "source": "sglang", "target": "openai-api", "label": "serves", "description": "SGLang provides an OpenAI-compatible API with excellent structured generation support." },
-    { "source": "litellm", "target": "anthropic-api", "label": "translates from", "description": "LiteLLM accepts Anthropic Messages API requests from Claude Code and translates them to whatever format the backend model server speaks." },
-    { "source": "litellm", "target": "openai-api", "label": "translates to", "description": "LiteLLM forwards requests to OpenAI-compatible backends (llama.cpp, vLLM, LM Studio) after format translation." },
-    { "source": "ccproxy", "target": "anthropic-api", "label": "intercepts", "description": "CCProxy sits between Claude Code and model servers, intercepting Anthropic API requests for intelligent routing based on token count, tool usage, or custom rules." },
-    { "source": "ccproxy", "target": "ollama", "label": "routes to", "description": "CCProxy can route Claude Code requests to a local Ollama instance for simple tasks." },
-    { "source": "claude-code", "target": "litellm", "label": "connects via ANTHROPIC_BASE_URL", "description": "Set ANTHROPIC_BASE_URL to point at LiteLLM proxy. Claude Code sends all requests there; LiteLLM handles routing and translation." },
-    { "source": "claude-code", "target": "ccproxy", "label": "connects via ANTHROPIC_BASE_URL", "description": "CCProxy provides intelligent routing — sending complex tasks to cloud Anthropic and simple tasks to local models." },
-    { "source": "claude-code", "target": "ollama", "label": "direct connection (v0.14+)", "description": "With Ollama's native Anthropic API support, Claude Code can connect directly without any proxy. Set ANTHROPIC_BASE_URL to localhost:11434." },
-    { "source": "aider", "target": "openai-api", "label": "speaks natively", "description": "Aider connects to any OpenAI-compatible endpoint, making it trivially compatible with all local inference engines." },
-    { "source": "continue-dev", "target": "ollama", "label": "connects to", "description": "Continue.dev has first-class Ollama integration for chat, autocomplete, and inline editing in VS Code/JetBrains." },
-    { "source": "continue-dev", "target": "openai-api", "label": "supports", "description": "Continue.dev can connect to any OpenAI-compatible server." },
-    { "source": "tabby", "target": "starcoder2", "label": "commonly uses", "description": "Tabby is often paired with StarCoder2 or similar FIM-capable models for fast inline code completions." },
-    { "source": "openhands", "target": "ollama", "label": "supports", "description": "OpenHands works with local models via Ollama. AMD partnership integrates it with Lemonade for AI PC inference." },
-    { "source": "openhands", "target": "lemonade", "label": "AMD integration", "description": "AMD partnered with OpenHands to integrate Lemonade for local AI PC inference, bringing agent capabilities to consumer hardware." },
-    { "source": "strix-halo", "target": "vulkan", "label": "best via RADV driver", "description": "Strix Halo's RDNA 3.5 iGPU works best with the Vulkan backend via the open-source RADV driver." },
-    { "source": "strix-halo", "target": "rocm", "label": "supported (regressions)", "description": "ROCm 7.x works on Strix Halo but has performance regressions. Vulkan is currently recommended instead." },
-    { "source": "strix-halo", "target": "xdna-npu", "label": "includes", "description": "Strix Halo includes the XDNA 2 NPU at 50 TOPS for AI acceleration." },
-    { "source": "ollama", "target": "ollama-library", "label": "pulls from", "description": "Ollama's 'ollama pull' command downloads models from the curated Ollama Library." },
-    { "source": "huggingface", "target": "gguf", "label": "hosts", "description": "HuggingFace hosts GGUF files directly. Search for model name + 'GGUF' to find quantized versions from various quantizers." },
-    { "source": "bartowski", "target": "huggingface", "label": "publishes to", "description": "bartowski publishes GGUF quantizations to HuggingFace, covering most new model releases within hours." },
-    { "source": "bartowski", "target": "gguf", "label": "produces", "description": "bartowski is the most prolific GGUF quantizer, providing multiple quant levels with imatrix calibration." },
-    { "source": "unsloth", "target": "huggingface", "label": "publishes to", "description": "Unsloth publishes Dynamic 2.0 GGUFs to HuggingFace with 25+ variants per major model." },
-    { "source": "unsloth", "target": "gguf", "label": "produces (Dynamic 2.0)", "description": "Unsloth's Dynamic 2.0 methodology uses calibration datasets for improved quantization quality on all model architectures." },
-    { "source": "qwen25-coder-32b", "target": "gguf", "label": "available as", "description": "Qwen 2.5 Coder 32B is available in GGUF at all quant levels. Q8_0 (~34GB) is the sweet spot for 128GB hardware." },
-    { "source": "qwen3-coder-next", "target": "gguf", "label": "available as", "description": "Qwen3-Coder-Next is available in GGUF. As a MoE model (~46GB), it benefits from unified memory architecture." },
-    { "source": "llama-3.3-70b", "target": "gguf", "label": "available as", "description": "Llama 3.3 70B is available in GGUF. Q5_K_M (~50GB) or Q6_K (~58GB) are recommended for 128GB hardware." },
-    { "source": "qwen25-72b", "target": "gguf", "label": "available as", "description": "Qwen 2.5 72B is available in GGUF. Q4_K_M (~45GB) to Q6_K (~60GB) fits well on 128GB hardware." },
-    { "source": "deepseek-r1-distill-70b", "target": "gguf", "label": "available as", "description": "R1-Distill-Llama-70B is available in GGUF. Q5_K_M (~50GB) is the premium choice for reasoning on 128GB hardware." },
-    { "source": "deepseek-r1-distill-32b", "target": "gguf", "label": "available as", "description": "R1-Distill-Qwen-32B at Q4_K_M (~20GB) is the efficiency sweet spot for reasoning tasks." },
-    { "source": "qwq-32b", "target": "gguf", "label": "available as", "description": "QwQ-32B at Q4_K_M (~20GB) provides an alternative reasoning approach to DeepSeek R1 distills." },
-    { "source": "phi-4", "target": "gguf", "label": "available as", "description": "Phi-4 14B at Q8_0 (~15GB) is an excellent fast secondary model that can run alongside larger models." },
-    { "source": "devstral-small-2", "target": "gguf", "label": "available as", "description": "Devstral Small 2 24B runs comfortably on consumer hardware in GGUF format." },
-    { "source": "devstral-2", "target": "gguf", "label": "available as", "description": "Devstral 2 123B at Q4_K_M (~75GB) fits in 128GB but leaves limited room for context." },
-    { "source": "llamafile", "target": "llama-cpp", "label": "bundles", "description": "llamafile embeds llama.cpp plus Cosmopolitan libc into a single executable that runs on any OS without installation." },
-    { "source": "llamafile", "target": "gguf", "label": "uses", "description": "llamafile packages GGUF models into self-contained executables for zero-dependency distribution." },
-    { "source": "bifrost", "target": "anthropic-api", "label": "translates from", "description": "Bifrost can accept Anthropic API requests and route them to various backends, similar to LiteLLM but lighter weight." },
-    { "source": "bifrost", "target": "openai-api", "label": "translates to", "description": "Bifrost forwards translated requests to OpenAI-compatible backends." },
-    { "source": "codestral", "target": "gguf", "label": "available as", "description": "Codestral 22B at Q4_K_M (~14GB) is efficient and fast — a good secondary code model." },
-    { "source": "codestral", "target": "devstral-small-2", "label": "evolved into", "description": "Codestral's architecture was the foundation for the Devstral family of agentic coding models." },
-    { "source": "mixtral-8x22b", "target": "gguf", "label": "available as", "description": "Mixtral 8x22B at Q4_K_M (~85GB) fits in 128GB but tight — limited room for long context." },
-    { "source": "mixtral-8x22b", "target": "strix-halo", "label": "benefits from unified memory", "description": "MoE models like Mixtral 8x22B benefit greatly from unified memory — all 141B parameters are accessible without PCIe transfers." },
-    { "source": "gemma2-27b", "target": "gguf", "label": "available as", "description": "Gemma 2 27B at Q4_K_M (~17GB) is very efficient but limited by 8K context." },
-    { "source": "gemma2-27b", "target": "ollama", "label": "available via", "description": "Gemma 2 27B is available in the Ollama Library with multiple quantization options." },
-    { "source": "localai", "target": "anthropic-api", "label": "supports natively", "description": "Since v3.10.0, LocalAI natively serves the Anthropic Messages API alongside OpenAI — one of only two engines (with Ollama) that speak Anthropic directly." },
-    { "source": "localai", "target": "openai-api", "label": "supports natively", "description": "LocalAI serves OpenAI-compatible endpoints as its primary API." },
-    { "source": "localai", "target": "llama-cpp", "label": "uses as backend", "description": "LocalAI can use llama.cpp as one of its inference backends, alongside vLLM, Transformers, and ExLlama2." },
-    { "source": "localai", "target": "gguf", "label": "supports", "description": "LocalAI supports GGUF, GGML, Safetensors, PyTorch, GPTQ, and AWQ formats." },
-    { "source": "claude-code", "target": "localai", "label": "direct connection", "description": "LocalAI speaks Anthropic Messages API natively — Claude Code can connect directly via ANTHROPIC_BASE_URL without any translation proxy." },
-    { "source": "kobold-cpp", "target": "llama-cpp", "label": "forks", "description": "kobold.cpp is a fork of llama.cpp with an integrated web UI and triple API compatibility (KoboldAI + OpenAI + Ollama)." },
-    { "source": "kobold-cpp", "target": "gguf", "label": "uses", "description": "kobold.cpp uses GGUF format, inheriting all quantization levels from llama.cpp." },
-    { "source": "kobold-cpp", "target": "openai-api", "label": "serves", "description": "kobold.cpp serves KoboldAI, OpenAI, and Ollama compatible endpoints simultaneously." },
-    { "source": "aphrodite", "target": "vllm", "label": "forks", "description": "Aphrodite is based on vLLM with extended quantization support — adding AQLM, QuIP#, EXL2, BitNet, and FP2-FP12 formats." },
-    { "source": "aphrodite", "target": "openai-api", "label": "serves", "description": "Aphrodite provides an OpenAI-compatible API with the broadest quantization format support of any engine." },
-    { "source": "aphrodite", "target": "aqlm", "label": "supports", "description": "Aphrodite is one of the few engines supporting AQLM for extreme 2-bit quantization." },
-    { "source": "aphrodite", "target": "gguf", "label": "supports", "description": "Aphrodite supports GGUF alongside its native safetensors-based formats." },
-    { "source": "powerinfer", "target": "llama-cpp", "label": "forks", "description": "PowerInfer is a llama.cpp fork that adds sparse heterogeneous GPU-CPU inference via neuron activation prediction." },
-    { "source": "powerinfer", "target": "strix-halo", "label": "benefits from unified memory", "description": "PowerInfer's GPU-CPU hybrid approach is especially effective on unified memory where hot/cold neuron placement has zero transfer overhead." },
-    { "source": "mlc-llm", "target": "vulkan", "label": "supports", "description": "MLC LLM compiles models to Vulkan for cross-platform GPU inference, relevant for Strix Halo's RDNA 3.5." },
-    { "source": "exl3", "target": "exllamav2", "label": "successor format for", "description": "EXL3 is the next-generation quantization format from turboderp, replacing EXL2 with QTIP-based trellis encoding for dramatically better quality at low bit widths." },
-    { "source": "lm-studio", "target": "vulkan", "label": "supports", "description": "LM Studio supports Vulkan offloading, outperforming Ollama on integrated GPUs like Strix Halo's RDNA 3.5." },
-    { "source": "sglang", "target": "rocm", "label": "supports", "description": "SGLang supports AMD ROCm for GPU inference, including MI300X/MI325X data center GPUs." },
-    { "source": "llm", "target": "transformer", "label": "built on", "description": "All modern LLMs use the transformer architecture, which enables parallel processing of tokens through self-attention." },
-    { "source": "llm", "target": "parameters", "label": "sized by", "description": "Model capability roughly scales with parameter count. A 70B model is generally more capable than a 7B model, but also needs 10x the memory." },
-    { "source": "llm", "target": "tokens", "label": "processes", "description": "LLMs read and generate text as tokens — sub-word units produced by a tokenizer. Everything is measured in tokens: context length, speed, cost." },
-    { "source": "llm", "target": "inference", "label": "runs via", "description": "Inference is the act of running a trained model to generate output. Local inference means the computation happens on your hardware." },
-    { "source": "inference", "target": "kv-cache", "label": "requires", "description": "During inference, the KV cache stores attention state for all processed tokens. It grows linearly with context length and can consume significant memory." },
-    { "source": "inference", "target": "memory-bandwidth", "label": "bottlenecked by", "description": "Token generation speed is determined by memory bandwidth — each new token requires reading all model weights from memory once." },
-    { "source": "quantization", "target": "parameters", "label": "compresses", "description": "Quantization reduces the bits used to store each parameter: from 16-bit (2 bytes) down to 4-bit (0.5 bytes) or lower, shrinking memory requirements proportionally." },
-    { "source": "gguf", "target": "quantization", "label": "implements", "description": "GGUF is a file format that packages quantized model weights. K-quants (Q2_K to Q8_0) and I-quants are the specific quantization methods it supports." },
-    { "source": "gptq", "target": "quantization", "label": "implements", "description": "GPTQ uses approximate second-order information from calibration data to optimize weight quantization with minimal quality loss." },
-    { "source": "awq", "target": "quantization", "label": "implements", "description": "AWQ identifies and preserves salient weight channels by observing activation patterns during calibration." },
-    { "source": "context-window", "target": "tokens", "label": "measured in", "description": "Context windows are measured in tokens. A 128K context model can process ~96,000 words of input+output in a single request." },
-    { "source": "context-window", "target": "kv-cache", "label": "consumes via", "description": "Longer context means a larger KV cache. At 128K tokens, a 70B model's KV cache can use 20-40GB of memory." },
-    { "source": "gpu", "target": "vram", "label": "has", "description": "GPUs have dedicated or shared memory for storing model weights and KV cache. Discrete GPUs: 8-48GB VRAM. Unified memory: up to 128GB+." },
-    { "source": "gpu", "target": "memory-bandwidth", "label": "provides", "description": "GPU memory bandwidth determines token generation speed. Discrete: 500-1000+ GB/s. Unified (Strix Halo): ~215 GB/s." },
-    { "source": "gpu", "target": "cuda", "label": "NVIDIA uses", "description": "NVIDIA GPUs use CUDA for compute. Most AI inference engines are CUDA-first, giving NVIDIA a software ecosystem advantage." },
-    { "source": "strix-halo", "target": "vram", "label": "128GB unified", "description": "Strix Halo's 128GB LPDDR5X is unified memory — shared between CPU, GPU, and NPU. The key advantage over discrete GPUs for large models." },
-    { "source": "strix-halo", "target": "memory-bandwidth", "label": "~215 GB/s", "description": "Strix Halo achieves ~215 GB/s real-world memory bandwidth. Lower than discrete GPUs but adequate for 5+ tok/s on 70B models." },
-    { "source": "strix-halo", "target": "gpu", "label": "integrates", "description": "Strix Halo integrates an RDNA 3.5 iGPU with 40 compute units — a GPU that shares the system's unified memory pool." },
-    { "source": "xdna-npu", "target": "npu", "label": "is a", "description": "AMD's XDNA 2 is an NPU — a dedicated neural processing unit optimized for AI workloads at low power." },
-    { "source": "moe", "target": "parameters", "label": "has total vs active", "description": "MoE models have many total parameters but activate only a subset per token. Mixtral 8x22B: 141B total, 39B active. More parameters in memory, less compute per token." },
-    { "source": "moe", "target": "vram", "label": "needs full size in", "description": "All MoE parameters must fit in memory even though only a fraction are active per token. Unified memory is ideal — no transfer overhead for dormant experts." },
-    { "source": "mixtral-8x22b", "target": "moe", "label": "uses", "description": "Mixtral 8x22B is an 8-expert MoE model: 141B total parameters, 39B active per token." },
-    { "source": "qwen3-coder-next", "target": "moe", "label": "uses", "description": "Qwen3-Coder-Next is an MoE model with 80B total but only 3B active parameters — excellent efficiency on unified memory." },
-    { "source": "tool-calling", "target": "llm", "label": "extends", "description": "Tool calling gives LLMs the ability to invoke external functions during a conversation, transforming them from text generators into agents." },
-    { "source": "claude-code", "target": "tool-calling", "label": "requires", "description": "Claude Code relies heavily on tool calling — reading files, running commands, editing code. Local models must support it reliably to work with Claude Code." },
-    { "source": "fine-tuning", "target": "llm", "label": "adapts", "description": "Fine-tuning takes a pre-trained LLM and trains it further on specific data. This creates specialized models like code assistants or reasoning models." },
-    { "source": "deepseek-r1-distill-70b", "target": "fine-tuning", "label": "created via", "description": "R1-Distill models are Llama/Qwen base models fine-tuned on DeepSeek R1's chain-of-thought reasoning traces." },
-    { "source": "unsloth", "target": "fine-tuning", "label": "provides tools for", "description": "Unsloth offers optimized fine-tuning tools alongside their GGUF quantizations — enabling users to create custom model variants." },
-    { "source": "vulkan", "target": "gpu", "label": "GPU compute API", "description": "Vulkan is a cross-platform GPU compute API. On AMD hardware without CUDA, Vulkan provides GPU-accelerated inference via the RADV driver." },
-    { "source": "rocm", "target": "gpu", "label": "AMD GPU compute", "description": "ROCm is AMD's open GPU compute platform — their answer to NVIDIA's CUDA. Supports AMD discrete and integrated GPUs." }
+    {
+      "source": "claude-code",
+      "target": "anthropic-api",
+      "label": "speaks natively",
+      "description": "Claude Code uses the Anthropic Messages API (/v1/messages) for all communication. This is the only protocol it understands."
+    },
+    {
+      "source": "ollama",
+      "target": "anthropic-api",
+      "label": "supports since v0.14",
+      "description": "Since January 2026, Ollama natively serves the Anthropic Messages API, enabling direct connection from Claude Code without a translation proxy."
+    },
+    {
+      "source": "ollama",
+      "target": "openai-api",
+      "label": "supports",
+      "description": "Ollama also serves the OpenAI-compatible /v1/chat/completions endpoint, making it compatible with most coding assistants."
+    },
+    {
+      "source": "ollama",
+      "target": "llama-cpp",
+      "label": "wraps",
+      "description": "Ollama uses llama.cpp as its inference backend, adding model management, a REST API, and a curated model library on top."
+    },
+    {
+      "source": "llama-cpp",
+      "target": "openai-api",
+      "label": "serves via llama-server",
+      "description": "llama-server provides an OpenAI-compatible HTTP API for any GGUF model loaded by llama.cpp."
+    },
+    {
+      "source": "llama-cpp",
+      "target": "gguf",
+      "label": "uses",
+      "description": "GGUF is the native and only format supported by llama.cpp. All quantization levels from Q2_K to F16 are available."
+    },
+    {
+      "source": "llama-cpp",
+      "target": "vulkan",
+      "label": "supports",
+      "description": "Vulkan is currently the fastest backend for llama.cpp on Strix Halo, outperforming ROCm for both prompt processing and token generation."
+    },
+    {
+      "source": "llama-cpp",
+      "target": "rocm",
+      "label": "supports (with issues)",
+      "description": "ROCm/HIP backend works but has performance regressions on Strix Halo. Requires workarounds: flash attention, --no-mmap, compiler flags."
+    },
+    {
+      "source": "vllm",
+      "target": "openai-api",
+      "label": "serves",
+      "description": "vLLM provides an OpenAI-compatible API. Better for batched multi-user serving than single-user desktop inference."
+    },
+    {
+      "source": "vllm",
+      "target": "awq",
+      "label": "supports",
+      "description": "vLLM supports AWQ quantized models for efficient GPU inference."
+    },
+    {
+      "source": "vllm",
+      "target": "gptq",
+      "label": "supports",
+      "description": "vLLM supports GPTQ quantized models."
+    },
+    {
+      "source": "vllm",
+      "target": "fp8",
+      "label": "supports",
+      "description": "vLLM supports FP8 inference on compatible hardware (NVIDIA Hopper/Blackwell)."
+    },
+    {
+      "source": "lm-studio",
+      "target": "llama-cpp",
+      "label": "built on",
+      "description": "LM Studio uses llama.cpp as its inference backend, providing a GUI and model browser on top."
+    },
+    {
+      "source": "lm-studio",
+      "target": "openai-api",
+      "label": "serves",
+      "description": "LM Studio can expose a local OpenAI-compatible server for other tools to connect to."
+    },
+    {
+      "source": "lemonade",
+      "target": "openai-api",
+      "label": "serves",
+      "description": "Lemonade exposes an OpenAI-compatible API at localhost:13305."
+    },
+    {
+      "source": "lemonade",
+      "target": "xdna-npu",
+      "label": "leverages for prefill",
+      "description": "Lemonade uses the XDNA NPU for prompt processing (prefill) to achieve fast time-to-first-token."
+    },
+    {
+      "source": "lemonade",
+      "target": "strix-halo",
+      "label": "optimized for",
+      "description": "Lemonade is AMD's purpose-built inference server for AI PCs including Strix Halo, splitting work between NPU and iGPU."
+    },
+    {
+      "source": "fastflowlm",
+      "target": "xdna-npu",
+      "label": "built for",
+      "description": "FastFlowLM is specifically designed to leverage AMD's XDNA NPU for local inference."
+    },
+    {
+      "source": "exllamav2",
+      "target": "exl2",
+      "label": "uses",
+      "description": "EXL2 is ExLlamaV2's native format with per-layer mixed-precision quantization."
+    },
+    {
+      "source": "sglang",
+      "target": "openai-api",
+      "label": "serves",
+      "description": "SGLang provides an OpenAI-compatible API with excellent structured generation support."
+    },
+    {
+      "source": "litellm",
+      "target": "anthropic-api",
+      "label": "translates from",
+      "description": "LiteLLM accepts Anthropic Messages API requests from Claude Code and translates them to whatever format the backend model server speaks."
+    },
+    {
+      "source": "litellm",
+      "target": "openai-api",
+      "label": "translates to",
+      "description": "LiteLLM forwards requests to OpenAI-compatible backends (llama.cpp, vLLM, LM Studio) after format translation."
+    },
+    {
+      "source": "ccproxy",
+      "target": "anthropic-api",
+      "label": "intercepts",
+      "description": "CCProxy sits between Claude Code and model servers, intercepting Anthropic API requests for intelligent routing based on token count, tool usage, or custom rules."
+    },
+    {
+      "source": "ccproxy",
+      "target": "ollama",
+      "label": "routes to",
+      "description": "CCProxy can route Claude Code requests to a local Ollama instance for simple tasks."
+    },
+    {
+      "source": "claude-code",
+      "target": "litellm",
+      "label": "connects via ANTHROPIC_BASE_URL",
+      "description": "Set ANTHROPIC_BASE_URL to point at LiteLLM proxy. Claude Code sends all requests there; LiteLLM handles routing and translation."
+    },
+    {
+      "source": "claude-code",
+      "target": "ccproxy",
+      "label": "connects via ANTHROPIC_BASE_URL",
+      "description": "CCProxy provides intelligent routing — sending complex tasks to cloud Anthropic and simple tasks to local models."
+    },
+    {
+      "source": "claude-code",
+      "target": "ollama",
+      "label": "direct connection (v0.14+)",
+      "description": "With Ollama's native Anthropic API support, Claude Code can connect directly without any proxy. Set ANTHROPIC_BASE_URL to localhost:11434."
+    },
+    {
+      "source": "aider",
+      "target": "openai-api",
+      "label": "speaks natively",
+      "description": "Aider connects to any OpenAI-compatible endpoint, making it trivially compatible with all local inference engines."
+    },
+    {
+      "source": "continue-dev",
+      "target": "ollama",
+      "label": "connects to",
+      "description": "Continue.dev has first-class Ollama integration for chat, autocomplete, and inline editing in VS Code/JetBrains."
+    },
+    {
+      "source": "continue-dev",
+      "target": "openai-api",
+      "label": "supports",
+      "description": "Continue.dev can connect to any OpenAI-compatible server."
+    },
+    {
+      "source": "tabby",
+      "target": "starcoder2",
+      "label": "commonly uses",
+      "description": "Tabby is often paired with StarCoder2 or similar FIM-capable models for fast inline code completions."
+    },
+    {
+      "source": "openhands",
+      "target": "ollama",
+      "label": "supports",
+      "description": "OpenHands works with local models via Ollama. AMD partnership integrates it with Lemonade for AI PC inference."
+    },
+    {
+      "source": "openhands",
+      "target": "lemonade",
+      "label": "AMD integration",
+      "description": "AMD partnered with OpenHands to integrate Lemonade for local AI PC inference, bringing agent capabilities to consumer hardware."
+    },
+    {
+      "source": "strix-halo",
+      "target": "vulkan",
+      "label": "best via RADV driver",
+      "description": "Strix Halo's RDNA 3.5 iGPU works best with the Vulkan backend via the open-source RADV driver."
+    },
+    {
+      "source": "strix-halo",
+      "target": "rocm",
+      "label": "supported (regressions)",
+      "description": "ROCm 7.x works on Strix Halo but has performance regressions. Vulkan is currently recommended instead."
+    },
+    {
+      "source": "strix-halo",
+      "target": "xdna-npu",
+      "label": "includes",
+      "description": "Strix Halo includes the XDNA 2 NPU at 50 TOPS for AI acceleration."
+    },
+    {
+      "source": "ollama",
+      "target": "ollama-library",
+      "label": "pulls from",
+      "description": "Ollama's 'ollama pull' command downloads models from the curated Ollama Library."
+    },
+    {
+      "source": "huggingface",
+      "target": "gguf",
+      "label": "hosts",
+      "description": "HuggingFace hosts GGUF files directly. Search for model name + 'GGUF' to find quantized versions from various quantizers."
+    },
+    {
+      "source": "bartowski",
+      "target": "huggingface",
+      "label": "publishes to",
+      "description": "bartowski publishes GGUF quantizations to HuggingFace, covering most new model releases within hours."
+    },
+    {
+      "source": "bartowski",
+      "target": "gguf",
+      "label": "produces",
+      "description": "bartowski is the most prolific GGUF quantizer, providing multiple quant levels with imatrix calibration."
+    },
+    {
+      "source": "unsloth",
+      "target": "huggingface",
+      "label": "publishes to",
+      "description": "Unsloth publishes Dynamic 2.0 GGUFs to HuggingFace with 25+ variants per major model."
+    },
+    {
+      "source": "unsloth",
+      "target": "gguf",
+      "label": "produces (Dynamic 2.0)",
+      "description": "Unsloth's Dynamic 2.0 methodology uses calibration datasets for improved quantization quality on all model architectures."
+    },
+    {
+      "source": "qwen25-coder-32b",
+      "target": "gguf",
+      "label": "available as",
+      "description": "Qwen 2.5 Coder 32B is available in GGUF at all quant levels. Q8_0 (~34GB) is the sweet spot for 128GB hardware."
+    },
+    {
+      "source": "qwen3-coder-next",
+      "target": "gguf",
+      "label": "available as",
+      "description": "Qwen3-Coder-Next is available in GGUF. As a MoE model (~46GB), it benefits from unified memory architecture."
+    },
+    {
+      "source": "llama-3.3-70b",
+      "target": "gguf",
+      "label": "available as",
+      "description": "Llama 3.3 70B is available in GGUF. Q5_K_M (~50GB) or Q6_K (~58GB) are recommended for 128GB hardware."
+    },
+    {
+      "source": "qwen25-72b",
+      "target": "gguf",
+      "label": "available as",
+      "description": "Qwen 2.5 72B is available in GGUF. Q4_K_M (~45GB) to Q6_K (~60GB) fits well on 128GB hardware."
+    },
+    {
+      "source": "deepseek-r1-distill-70b",
+      "target": "gguf",
+      "label": "available as",
+      "description": "R1-Distill-Llama-70B is available in GGUF. Q5_K_M (~50GB) is the premium choice for reasoning on 128GB hardware."
+    },
+    {
+      "source": "deepseek-r1-distill-32b",
+      "target": "gguf",
+      "label": "available as",
+      "description": "R1-Distill-Qwen-32B at Q4_K_M (~20GB) is the efficiency sweet spot for reasoning tasks."
+    },
+    {
+      "source": "qwq-32b",
+      "target": "gguf",
+      "label": "available as",
+      "description": "QwQ-32B at Q4_K_M (~20GB) provides an alternative reasoning approach to DeepSeek R1 distills."
+    },
+    {
+      "source": "phi-4",
+      "target": "gguf",
+      "label": "available as",
+      "description": "Phi-4 14B at Q8_0 (~15GB) is an excellent fast secondary model that can run alongside larger models."
+    },
+    {
+      "source": "devstral-small-2",
+      "target": "gguf",
+      "label": "available as",
+      "description": "Devstral Small 2 24B runs comfortably on consumer hardware in GGUF format."
+    },
+    {
+      "source": "devstral-2",
+      "target": "gguf",
+      "label": "available as",
+      "description": "Devstral 2 123B at Q4_K_M (~75GB) fits in 128GB but leaves limited room for context."
+    },
+    {
+      "source": "llamafile",
+      "target": "llama-cpp",
+      "label": "bundles",
+      "description": "llamafile embeds llama.cpp plus Cosmopolitan libc into a single executable that runs on any OS without installation."
+    },
+    {
+      "source": "llamafile",
+      "target": "gguf",
+      "label": "uses",
+      "description": "llamafile packages GGUF models into self-contained executables for zero-dependency distribution."
+    },
+    {
+      "source": "bifrost",
+      "target": "anthropic-api",
+      "label": "translates from",
+      "description": "Bifrost can accept Anthropic API requests and route them to various backends, similar to LiteLLM but lighter weight."
+    },
+    {
+      "source": "bifrost",
+      "target": "openai-api",
+      "label": "translates to",
+      "description": "Bifrost forwards translated requests to OpenAI-compatible backends."
+    },
+    {
+      "source": "codestral",
+      "target": "gguf",
+      "label": "available as",
+      "description": "Codestral 22B at Q4_K_M (~14GB) is efficient and fast — a good secondary code model."
+    },
+    {
+      "source": "codestral",
+      "target": "devstral-small-2",
+      "label": "evolved into",
+      "description": "Codestral's architecture was the foundation for the Devstral family of agentic coding models."
+    },
+    {
+      "source": "mixtral-8x22b",
+      "target": "gguf",
+      "label": "available as",
+      "description": "Mixtral 8x22B at Q4_K_M (~85GB) fits in 128GB but tight — limited room for long context."
+    },
+    {
+      "source": "mixtral-8x22b",
+      "target": "strix-halo",
+      "label": "benefits from unified memory",
+      "description": "MoE models like Mixtral 8x22B benefit greatly from unified memory — all 141B parameters are accessible without PCIe transfers."
+    },
+    {
+      "source": "gemma2-27b",
+      "target": "gguf",
+      "label": "available as",
+      "description": "Gemma 2 27B at Q4_K_M (~17GB) is very efficient but limited by 8K context."
+    },
+    {
+      "source": "gemma2-27b",
+      "target": "ollama",
+      "label": "available via",
+      "description": "Gemma 2 27B is available in the Ollama Library with multiple quantization options."
+    },
+    {
+      "source": "localai",
+      "target": "anthropic-api",
+      "label": "supports natively",
+      "description": "Since v3.10.0, LocalAI natively serves the Anthropic Messages API alongside OpenAI — one of only two engines (with Ollama) that speak Anthropic directly."
+    },
+    {
+      "source": "localai",
+      "target": "openai-api",
+      "label": "supports natively",
+      "description": "LocalAI serves OpenAI-compatible endpoints as its primary API."
+    },
+    {
+      "source": "localai",
+      "target": "llama-cpp",
+      "label": "uses as backend",
+      "description": "LocalAI can use llama.cpp as one of its inference backends, alongside vLLM, Transformers, and ExLlama2."
+    },
+    {
+      "source": "localai",
+      "target": "gguf",
+      "label": "supports",
+      "description": "LocalAI supports GGUF, GGML, Safetensors, PyTorch, GPTQ, and AWQ formats."
+    },
+    {
+      "source": "claude-code",
+      "target": "localai",
+      "label": "direct connection",
+      "description": "LocalAI speaks Anthropic Messages API natively — Claude Code can connect directly via ANTHROPIC_BASE_URL without any translation proxy."
+    },
+    {
+      "source": "kobold-cpp",
+      "target": "llama-cpp",
+      "label": "forks",
+      "description": "kobold.cpp is a fork of llama.cpp with an integrated web UI and triple API compatibility (KoboldAI + OpenAI + Ollama)."
+    },
+    {
+      "source": "kobold-cpp",
+      "target": "gguf",
+      "label": "uses",
+      "description": "kobold.cpp uses GGUF format, inheriting all quantization levels from llama.cpp."
+    },
+    {
+      "source": "kobold-cpp",
+      "target": "openai-api",
+      "label": "serves",
+      "description": "kobold.cpp serves KoboldAI, OpenAI, and Ollama compatible endpoints simultaneously."
+    },
+    {
+      "source": "aphrodite",
+      "target": "vllm",
+      "label": "forks",
+      "description": "Aphrodite is based on vLLM with extended quantization support — adding AQLM, QuIP#, EXL2, BitNet, and FP2-FP12 formats."
+    },
+    {
+      "source": "aphrodite",
+      "target": "openai-api",
+      "label": "serves",
+      "description": "Aphrodite provides an OpenAI-compatible API with the broadest quantization format support of any engine."
+    },
+    {
+      "source": "aphrodite",
+      "target": "aqlm",
+      "label": "supports",
+      "description": "Aphrodite is one of the few engines supporting AQLM for extreme 2-bit quantization."
+    },
+    {
+      "source": "aphrodite",
+      "target": "gguf",
+      "label": "supports",
+      "description": "Aphrodite supports GGUF alongside its native safetensors-based formats."
+    },
+    {
+      "source": "powerinfer",
+      "target": "llama-cpp",
+      "label": "forks",
+      "description": "PowerInfer is a llama.cpp fork that adds sparse heterogeneous GPU-CPU inference via neuron activation prediction."
+    },
+    {
+      "source": "powerinfer",
+      "target": "strix-halo",
+      "label": "benefits from unified memory",
+      "description": "PowerInfer's GPU-CPU hybrid approach is especially effective on unified memory where hot/cold neuron placement has zero transfer overhead."
+    },
+    {
+      "source": "mlc-llm",
+      "target": "vulkan",
+      "label": "supports",
+      "description": "MLC LLM compiles models to Vulkan for cross-platform GPU inference, relevant for Strix Halo's RDNA 3.5."
+    },
+    {
+      "source": "exl3",
+      "target": "exllamav2",
+      "label": "successor format for",
+      "description": "EXL3 is the next-generation quantization format from turboderp, replacing EXL2 with QTIP-based trellis encoding for dramatically better quality at low bit widths."
+    },
+    {
+      "source": "lm-studio",
+      "target": "vulkan",
+      "label": "supports",
+      "description": "LM Studio supports Vulkan offloading, outperforming Ollama on integrated GPUs like Strix Halo's RDNA 3.5."
+    },
+    {
+      "source": "sglang",
+      "target": "rocm",
+      "label": "supports",
+      "description": "SGLang supports AMD ROCm for GPU inference, including MI300X/MI325X data center GPUs."
+    },
+    {
+      "source": "llm",
+      "target": "transformer",
+      "label": "built on",
+      "description": "All modern LLMs use the transformer architecture, which enables parallel processing of tokens through self-attention."
+    },
+    {
+      "source": "llm",
+      "target": "parameters",
+      "label": "sized by",
+      "description": "Model capability roughly scales with parameter count. A 70B model is generally more capable than a 7B model, but also needs 10x the memory."
+    },
+    {
+      "source": "llm",
+      "target": "tokens",
+      "label": "processes",
+      "description": "LLMs read and generate text as tokens — sub-word units produced by a tokenizer. Everything is measured in tokens: context length, speed, cost."
+    },
+    {
+      "source": "llm",
+      "target": "inference",
+      "label": "runs via",
+      "description": "Inference is the act of running a trained model to generate output. Local inference means the computation happens on your hardware."
+    },
+    {
+      "source": "inference",
+      "target": "kv-cache",
+      "label": "requires",
+      "description": "During inference, the KV cache stores attention state for all processed tokens. It grows linearly with context length and can consume significant memory."
+    },
+    {
+      "source": "inference",
+      "target": "memory-bandwidth",
+      "label": "bottlenecked by",
+      "description": "Token generation speed is determined by memory bandwidth — each new token requires reading all model weights from memory once."
+    },
+    {
+      "source": "quantization",
+      "target": "parameters",
+      "label": "compresses",
+      "description": "Quantization reduces the bits used to store each parameter: from 16-bit (2 bytes) down to 4-bit (0.5 bytes) or lower, shrinking memory requirements proportionally."
+    },
+    {
+      "source": "gguf",
+      "target": "quantization",
+      "label": "implements",
+      "description": "GGUF is a file format that packages quantized model weights. K-quants (Q2_K to Q8_0) and I-quants are the specific quantization methods it supports."
+    },
+    {
+      "source": "gptq",
+      "target": "quantization",
+      "label": "implements",
+      "description": "GPTQ uses approximate second-order information from calibration data to optimize weight quantization with minimal quality loss."
+    },
+    {
+      "source": "awq",
+      "target": "quantization",
+      "label": "implements",
+      "description": "AWQ identifies and preserves salient weight channels by observing activation patterns during calibration."
+    },
+    {
+      "source": "context-window",
+      "target": "tokens",
+      "label": "measured in",
+      "description": "Context windows are measured in tokens. A 128K context model can process ~96,000 words of input+output in a single request."
+    },
+    {
+      "source": "context-window",
+      "target": "kv-cache",
+      "label": "consumes via",
+      "description": "Longer context means a larger KV cache. At 128K tokens, a 70B model's KV cache can use 20-40GB of memory."
+    },
+    {
+      "source": "gpu",
+      "target": "vram",
+      "label": "has",
+      "description": "GPUs have dedicated or shared memory for storing model weights and KV cache. Discrete GPUs: 8-48GB VRAM. Unified memory: up to 128GB+."
+    },
+    {
+      "source": "gpu",
+      "target": "memory-bandwidth",
+      "label": "provides",
+      "description": "GPU memory bandwidth determines token generation speed. Discrete: 500-1000+ GB/s. Unified (Strix Halo): ~215 GB/s."
+    },
+    {
+      "source": "gpu",
+      "target": "cuda",
+      "label": "NVIDIA uses",
+      "description": "NVIDIA GPUs use CUDA for compute. Most AI inference engines are CUDA-first, giving NVIDIA a software ecosystem advantage."
+    },
+    {
+      "source": "strix-halo",
+      "target": "vram",
+      "label": "128GB unified",
+      "description": "Strix Halo's 128GB LPDDR5X is unified memory — shared between CPU, GPU, and NPU. The key advantage over discrete GPUs for large models."
+    },
+    {
+      "source": "strix-halo",
+      "target": "memory-bandwidth",
+      "label": "~215 GB/s",
+      "description": "Strix Halo achieves ~215 GB/s real-world memory bandwidth. Lower than discrete GPUs but adequate for 5+ tok/s on 70B models."
+    },
+    {
+      "source": "strix-halo",
+      "target": "gpu",
+      "label": "integrates",
+      "description": "Strix Halo integrates an RDNA 3.5 iGPU with 40 compute units — a GPU that shares the system's unified memory pool."
+    },
+    {
+      "source": "xdna-npu",
+      "target": "npu",
+      "label": "is a",
+      "description": "AMD's XDNA 2 is an NPU — a dedicated neural processing unit optimized for AI workloads at low power."
+    },
+    {
+      "source": "moe",
+      "target": "parameters",
+      "label": "has total vs active",
+      "description": "MoE models have many total parameters but activate only a subset per token. Mixtral 8x22B: 141B total, 39B active. More parameters in memory, less compute per token."
+    },
+    {
+      "source": "moe",
+      "target": "vram",
+      "label": "needs full size in",
+      "description": "All MoE parameters must fit in memory even though only a fraction are active per token. Unified memory is ideal — no transfer overhead for dormant experts."
+    },
+    {
+      "source": "mixtral-8x22b",
+      "target": "moe",
+      "label": "uses",
+      "description": "Mixtral 8x22B is an 8-expert MoE model: 141B total parameters, 39B active per token."
+    },
+    {
+      "source": "qwen3-coder-next",
+      "target": "moe",
+      "label": "uses",
+      "description": "Qwen3-Coder-Next is an MoE model with 80B total but only 3B active parameters — excellent efficiency on unified memory."
+    },
+    {
+      "source": "tool-calling",
+      "target": "llm",
+      "label": "extends",
+      "description": "Tool calling gives LLMs the ability to invoke external functions during a conversation, transforming them from text generators into agents."
+    },
+    {
+      "source": "claude-code",
+      "target": "tool-calling",
+      "label": "requires",
+      "description": "Claude Code relies heavily on tool calling — reading files, running commands, editing code. Local models must support it reliably to work with Claude Code."
+    },
+    {
+      "source": "fine-tuning",
+      "target": "llm",
+      "label": "adapts",
+      "description": "Fine-tuning takes a pre-trained LLM and trains it further on specific data. This creates specialized models like code assistants or reasoning models."
+    },
+    {
+      "source": "deepseek-r1-distill-70b",
+      "target": "fine-tuning",
+      "label": "created via",
+      "description": "R1-Distill models are Llama/Qwen base models fine-tuned on DeepSeek R1's chain-of-thought reasoning traces."
+    },
+    {
+      "source": "unsloth",
+      "target": "fine-tuning",
+      "label": "provides tools for",
+      "description": "Unsloth offers optimized fine-tuning tools alongside their GGUF quantizations — enabling users to create custom model variants."
+    },
+    {
+      "source": "vulkan",
+      "target": "gpu",
+      "label": "GPU compute API",
+      "description": "Vulkan is a cross-platform GPU compute API. On AMD hardware without CUDA, Vulkan provides GPU-accelerated inference via the RADV driver."
+    },
+    {
+      "source": "rocm",
+      "target": "gpu",
+      "label": "AMD GPU compute",
+      "description": "ROCm is AMD's open GPU compute platform — their answer to NVIDIA's CUDA. Supports AMD discrete and integrated GPUs."
+    },
+    {
+      "source": "codex",
+      "target": "openai-api",
+      "label": "speaks natively",
+      "description": "Codex CLI uses the OpenAI Responses API for all communication. This is its native protocol."
+    },
+    {
+      "source": "codex",
+      "target": "litellm",
+      "label": "connects via OPENAI_BASE_URL",
+      "description": "Set OPENAI_BASE_URL to point at LiteLLM proxy. Codex sends all requests there; LiteLLM handles routing to local models."
+    },
+    {
+      "source": "codex",
+      "target": "ollama",
+      "label": "connects via OpenAI compat",
+      "description": "Ollama exposes an OpenAI-compatible endpoint. Codex can connect directly by setting OPENAI_BASE_URL to the Ollama server."
+    },
+    {
+      "source": "codex",
+      "target": "tool-calling",
+      "label": "requires",
+      "description": "Codex CLI relies on tool calling for file operations and shell commands. Local models must support function calling reliably."
+    },
+    {
+      "source": "gemini-cli",
+      "target": "openai-api",
+      "label": "supports via openai/ prefix",
+      "description": "Gemini CLI can connect to OpenAI-compatible endpoints by prefixing the model name with openai/. This enables local model usage."
+    },
+    {
+      "source": "gemini-cli",
+      "target": "litellm",
+      "label": "connects via OpenAI compat",
+      "description": "Gemini CLI can route through LiteLLM using the openai/ model prefix, letting LiteLLM handle translation to local engines."
+    },
+    {
+      "source": "gemini-cli",
+      "target": "ollama",
+      "label": "connects via OpenAI compat",
+      "description": "Gemini CLI can connect to Ollama through its OpenAI-compatible endpoint using the openai/ model prefix."
+    },
+    {
+      "source": "gemini-cli",
+      "target": "tool-calling",
+      "label": "requires",
+      "description": "Gemini CLI uses tool calling for file operations and shell commands. Local models need reliable function calling support."
+    }
   ]
 }
