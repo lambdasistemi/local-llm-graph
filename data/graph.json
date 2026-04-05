@@ -439,6 +439,44 @@
       ]
     },
     {
+      "id": "claude-max",
+      "label": "Claude Max Plan",
+      "kind": "assistant",
+      "group": "assistants",
+      "description": "Anthropic's highest-tier subscription ($100-200/month). Includes 20x more Claude Code usage than Pro. Best for developers who use Claude Code as their primary coding tool. The cloud backbone of a hybrid setup — handles complex multi-file edits, architectural planning, large refactors, and tasks requiring deep reasoning. Cost-effective when paired with local models for routine work.",
+      "links": [
+        { "label": "Pricing", "url": "https://www.anthropic.com/pricing" }
+      ]
+    },
+    {
+      "id": "claude-pro",
+      "label": "Claude Pro Plan",
+      "kind": "assistant",
+      "group": "assistants",
+      "description": "Anthropic's mid-tier subscription ($20/month). Includes Claude Code access with moderate usage limits. For hybrid setups, Pro is viable if most routine work is offloaded to local models — reserving cloud tokens for tasks that genuinely need Opus/Sonnet-class reasoning. Hitting rate limits is the signal to route more aggressively to local.",
+      "links": [
+        { "label": "Pricing", "url": "https://www.anthropic.com/pricing" }
+      ]
+    },
+    {
+      "id": "subagent",
+      "label": "Claude Code Subagents",
+      "kind": "concept",
+      "group": "assistants",
+      "description": "Claude Code can launch subagents — child processes that handle specific subtasks autonomously. In a hybrid setup, subagents are the key routing unit: the main Claude Code session runs on cloud (Opus/Sonnet) for orchestration, while subagents for grep, file exploration, simple edits, test running, and code search are routed to local models via a proxy. Subagents are short-lived and context-limited, making them ideal for smaller local models.",
+      "links": [
+        { "label": "Claude Code Docs", "url": "https://docs.anthropic.com/en/docs/claude-code" }
+      ]
+    },
+    {
+      "id": "task-routing",
+      "label": "Task Routing Strategy",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "The decision logic for which requests go to cloud vs local. Key signals: token count (short context → local), tool complexity (single grep → local, multi-file edit → cloud), task type (exploration → local, planning → cloud), and model capability required (code search → local 32B, architectural reasoning → Opus). A good proxy like CCProxy automates this based on configurable rules.",
+      "links": []
+    },
+    {
       "id": "openhands",
       "label": "OpenHands",
       "kind": "assistant",
@@ -813,6 +851,14 @@
     { "source": "deepseek-r1-distill-70b", "target": "fine-tuning", "label": "created via", "description": "R1-Distill models are Llama/Qwen base models fine-tuned on DeepSeek R1's chain-of-thought reasoning traces." },
     { "source": "unsloth", "target": "fine-tuning", "label": "provides tools for", "description": "Unsloth offers optimized fine-tuning tools alongside their GGUF quantizations — enabling users to create custom model variants." },
     { "source": "vulkan", "target": "gpu", "label": "GPU compute API", "description": "Vulkan is a cross-platform GPU compute API. On AMD hardware without CUDA, Vulkan provides GPU-accelerated inference via the RADV driver." },
-    { "source": "rocm", "target": "gpu", "label": "AMD GPU compute", "description": "ROCm is AMD's open GPU compute platform — their answer to NVIDIA's CUDA. Supports AMD discrete and integrated GPUs." }
+    { "source": "rocm", "target": "gpu", "label": "AMD GPU compute", "description": "ROCm is AMD's open GPU compute platform — their answer to NVIDIA's CUDA. Supports AMD discrete and integrated GPUs." },
+    { "source": "claude-code", "target": "claude-max", "label": "best with", "description": "Claude Max provides the highest Claude Code usage limits. The main session orchestrator runs on Max — planning, complex edits, and multi-file refactors consume cloud tokens." },
+    { "source": "claude-code", "target": "claude-pro", "label": "works with", "description": "Claude Pro gives moderate Claude Code usage. Viable for hybrid setups where most routine exploration and simple tasks are offloaded to local models." },
+    { "source": "claude-code", "target": "subagent", "label": "launches", "description": "Claude Code spawns subagents for specific subtasks — file exploration, code search, grep, test running. Each subagent is an independent LLM call that can be routed differently from the main session." },
+    { "source": "subagent", "target": "ollama", "label": "can route to", "description": "Subagents handling simple tasks (explore codebase, search for patterns, read files) can be routed to local models via Ollama, saving cloud tokens for the main orchestrator." },
+    { "source": "subagent", "target": "task-routing", "label": "governed by", "description": "Task routing logic decides which subagents go local vs cloud. Simple heuristic: exploration and search subagents → local, planning and edit subagents → cloud." },
+    { "source": "task-routing", "target": "ccproxy", "label": "implemented by", "description": "CCProxy can implement task routing rules — inspecting request patterns, token counts, and tool usage to decide local vs cloud routing." },
+    { "source": "claude-max", "target": "anthropic-api", "label": "accessed via", "description": "Max plan usage goes through the standard Anthropic Messages API. The main Claude Code session targets this for complex orchestration." },
+    { "source": "claude-pro", "target": "anthropic-api", "label": "accessed via", "description": "Pro plan usage goes through the Anthropic Messages API with lower rate limits than Max." }
   ]
 }
