@@ -1020,6 +1020,67 @@
           "url": "https://github.com/google-gemini/gemini-cli"
         }
       ]
+    },
+    {
+      "id": "sensitive-ops",
+      "label": "Sensitive Operations",
+      "kind": "use-case",
+      "group": "use-cases",
+      "description": "Tasks where data must not leave the machine: infrastructure credentials, email content, personal data, CMS administration. A local 7B model handles these at sufficient quality — the tasks are structured, repetitive, and verifiable. No API calls, no cloud exposure.",
+      "links": []
+    },
+    {
+      "id": "infra-maintenance",
+      "label": "Infrastructure Maintenance",
+      "kind": "use-case",
+      "group": "use-cases",
+      "description": "Generating and editing Traefik configs, docker-compose files, DNS records, NixOS configurations. These follow templates and patterns — a local model produces correct output without needing frontier-level reasoning. Credentials and server details stay local.",
+      "links": []
+    },
+    {
+      "id": "email-processing",
+      "label": "Email Processing",
+      "kind": "use-case",
+      "group": "use-cases",
+      "description": "Drafting, summarizing, classifying, and triaging emails. Content is personal and often confidential. A local model handles the structured language tasks (extract action items, draft replies, categorize) without exposing message content to external APIs.",
+      "links": []
+    },
+    {
+      "id": "web-scraping",
+      "label": "Web Scraping & Extraction",
+      "kind": "use-case",
+      "group": "use-cases",
+      "description": "Parsing HTML, extracting structured data from web pages, transforming scraped content into JSON/CSV. High-volume, repetitive work where correctness is checkable by schema validation. No intelligence needed — just reliable pattern extraction at scale.",
+      "links": []
+    },
+    {
+      "id": "cms-admin",
+      "label": "CMS Administration",
+      "kind": "use-case",
+      "group": "use-cases",
+      "description": "Content management operations: generating metadata, bulk-editing entries, transforming content formats, producing SEO summaries. Templated, verifiable output. Admin credentials and unpublished content stay on-machine.",
+      "links": []
+    },
+    {
+      "id": "data-privacy",
+      "label": "Data Privacy Boundary",
+      "kind": "concept",
+      "group": "concepts",
+      "description": "The fundamental reason to run models locally: sensitive data never crosses a network boundary. API-based models require sending prompts (containing your data) to external servers. Local inference keeps everything on-machine. This matters for credentials, personal emails, proprietary configs, and any data subject to compliance requirements.",
+      "links": []
+    },
+    {
+      "id": "qwen25-coder-7b",
+      "label": "Qwen 2.5 Coder 7B",
+      "kind": "model",
+      "group": "models",
+      "description": "Best coding model at the 7B tier (76% HumanEval). Runs at ~9 tok/s on an i5-13500 CPU, ~50 tok/s on Strix Halo. Good enough for structured generation tasks (configs, templates, data extraction) while fitting in minimal memory (~4.5GB Q4). Not suitable for complex reasoning or niche languages (Haskell, PureScript, Nix).",
+      "links": [
+        {
+          "label": "HuggingFace",
+          "url": "https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct"
+        }
+      ]
     }
   ],
   "edges": [
@@ -1778,6 +1839,78 @@
       "target": "context-window",
       "label": "determines limits of",
       "description": "The positional encoding scheme determines how well a model generalizes to sequence lengths beyond its training data. RoPE with YaRN extension allows models trained at 256K to extrapolate to 1M tokens."
+    },
+    {
+      "source": "sensitive-ops",
+      "target": "data-privacy",
+      "label": "requires",
+      "description": "Sensitive operations exist because of the data privacy boundary — the entire point is keeping data off external APIs."
+    },
+    {
+      "source": "infra-maintenance",
+      "target": "sensitive-ops",
+      "label": "is a",
+      "description": "Infrastructure work involves credentials, server IPs, and config secrets that must not leave the machine."
+    },
+    {
+      "source": "email-processing",
+      "target": "sensitive-ops",
+      "label": "is a",
+      "description": "Emails contain personal and confidential content — processing them locally avoids exposing message bodies to external services."
+    },
+    {
+      "source": "web-scraping",
+      "target": "sensitive-ops",
+      "label": "is a",
+      "description": "Scraping tasks are high-volume and repetitive — running them locally avoids API costs and rate limits while keeping extracted data private."
+    },
+    {
+      "source": "cms-admin",
+      "target": "sensitive-ops",
+      "label": "is a",
+      "description": "CMS admin involves unpublished content and admin credentials. Local processing keeps both private."
+    },
+    {
+      "source": "sensitive-ops",
+      "target": "ollama",
+      "label": "served by",
+      "description": "Ollama provides the local inference server for sensitive operations — models run on localhost, no data leaves the machine."
+    },
+    {
+      "source": "sensitive-ops",
+      "target": "qwen25-coder-7b",
+      "label": "best served by",
+      "description": "Qwen 2.5 Coder 7B is the sweet spot for sensitive ops: good structured output quality, small footprint (~4.5GB), fast enough on CPU or iGPU."
+    },
+    {
+      "source": "sensitive-ops",
+      "target": "strix-halo",
+      "label": "runs well on",
+      "description": "Strix Halo's 128GB unified memory and 215 GB/s bandwidth make it ideal for local inference — 50+ tok/s on 7B models, enough for interactive sensitive ops."
+    },
+    {
+      "source": "data-privacy",
+      "target": "llm",
+      "label": "constrains deployment of",
+      "description": "Data privacy requirements determine whether an LLM task can use a cloud API or must run locally. Sensitive data mandates local inference."
+    },
+    {
+      "source": "claude-code",
+      "target": "sensitive-ops",
+      "label": "delegates to local model",
+      "description": "Claude Code handles complex reasoning via the Anthropic API, but delegates sensitive operations to a local model via MCP server wrapping ollama. The local model handles tasks where data must not leave the machine."
+    },
+    {
+      "source": "qwen25-coder-7b",
+      "target": "ollama",
+      "label": "available via",
+      "description": "Qwen 2.5 Coder 7B is available in the Ollama Library as qwen2.5-coder:7b."
+    },
+    {
+      "source": "qwen25-coder-7b",
+      "target": "gguf",
+      "label": "available as",
+      "description": "Qwen 2.5 Coder 7B is available in GGUF format at multiple quantization levels from bartowski and others."
     }
   ]
 }

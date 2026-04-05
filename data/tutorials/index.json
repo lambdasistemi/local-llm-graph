@@ -22,5 +22,11 @@
     "title": "Choosing the Right Model",
     "description": "Navigate the model landscape — code, reasoning, and general purpose.",
     "file": "data/tutorials/model-selection.json"
+  },
+  {
+    "id": "sensitive-ops",
+    "title": "Local Models for Sensitive Operations",
+    "description": "Why infra, email, CMS, and scraping tasks belong on a local model — privacy, cost, and the right quality bar.",
+    "file": "data/tutorials/sensitive-ops.json"
   }
 ]

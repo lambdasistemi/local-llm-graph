@@ -11,6 +11,7 @@
     "hardware": { "label": "Hardware / Backend", "color": "#79c0ff", "shape": "barrel" },
     "hub": { "label": "Model Hub / Quantizer", "color": "#e3b341", "shape": "round-pentagon" },
     "protocol": { "label": "API Protocol", "color": "#8b949e", "shape": "rectangle" },
-    "concept": { "label": "Concept", "color": "#56d364", "shape": "star" }
+    "concept": { "label": "Concept", "color": "#56d364", "shape": "star" },
+    "use-case": { "label": "Use Case", "color": "#da3633", "shape": "round-triangle" }
   }
 }
