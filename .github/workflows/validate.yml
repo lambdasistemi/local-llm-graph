@@ -16,3 +16,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: lambdasistemi/graph-browser/validate-action@feat/validate-action
+        with:
+          schema-ref: feat/validate-action
