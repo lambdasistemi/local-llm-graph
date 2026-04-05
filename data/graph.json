@@ -443,9 +443,11 @@
       "label": "Claude Max Plan",
       "kind": "assistant",
       "group": "assistants",
-      "description": "Anthropic's highest-tier subscription ($100-200/month). Includes 20x more Claude Code usage than Pro. Best for developers who use Claude Code as their primary coding tool. The cloud backbone of a hybrid setup — handles complex multi-file edits, architectural planning, large refactors, and tasks requiring deep reasoning. Cost-effective when paired with local models for routine work.",
+      "description": "Anthropic's highest-tier subscription in two tiers: Max 5x ($100/month) and Max 20x ($200/month), providing 5x or 20x the usage limits of Pro. Includes priority access to new models (Opus 4.6 with 1M context), Claude Code, Claude Cowork (agentic feature launched Jan 2026), and voice mode. The cloud backbone of a hybrid setup — handles complex multi-file edits, architectural planning, and deep reasoning. Per-subagent model routing is still an open feature request (claude-code#38698) — current workaround is proxy-based routing via CCProxy or Claude Code Router. Team plan ($25-150/user/month) adds shared workspace features.",
       "links": [
-        { "label": "Pricing", "url": "https://www.anthropic.com/pricing" }
+        { "label": "Max Plan", "url": "https://claude.com/pricing/max" },
+        { "label": "Pricing", "url": "https://claude.com/pricing" },
+        { "label": "Subagent routing issue", "url": "https://github.com/anthropics/claude-code/issues/38698" }
       ]
     },
     {
@@ -453,9 +455,10 @@
       "label": "Claude Pro Plan",
       "kind": "assistant",
       "group": "assistants",
-      "description": "Anthropic's mid-tier subscription ($20/month). Includes Claude Code access with moderate usage limits. For hybrid setups, Pro is viable if most routine work is offloaded to local models — reserving cloud tokens for tasks that genuinely need Opus/Sonnet-class reasoning. Hitting rate limits is the signal to route more aggressively to local.",
+      "description": "Anthropic's mid-tier subscription ($20/month). Includes Claude Code access, Claude Cowork (expanded from Max in Jan 2026), and moderate usage limits. For hybrid setups, Pro is viable if most routine work is offloaded to local models — reserving cloud tokens for tasks that genuinely need Opus/Sonnet-class reasoning. Hitting rate limits is the signal to route more aggressively to local. API pricing is separate: Haiku 4.5 ($1/$5), Sonnet 4.6 ($3/$15), Opus 4.6 ($5/$25) per million input/output tokens, with 50% Batch API discount.",
       "links": [
-        { "label": "Pricing", "url": "https://www.anthropic.com/pricing" }
+        { "label": "Pricing", "url": "https://claude.com/pricing" },
+        { "label": "API Pricing", "url": "https://platform.claude.com/docs/en/about-claude/pricing" }
       ]
     },
     {
@@ -463,9 +466,11 @@
       "label": "Claude Code Subagents",
       "kind": "concept",
       "group": "assistants",
-      "description": "Claude Code can launch subagents — child processes that handle specific subtasks autonomously. In a hybrid setup, subagents are the key routing unit: the main Claude Code session runs on cloud (Opus/Sonnet) for orchestration, while subagents for grep, file exploration, simple edits, test running, and code search are routed to local models via a proxy. Subagents are short-lived and context-limited, making them ideal for smaller local models.",
+      "description": "Claude Code can launch subagents — child processes that handle specific subtasks autonomously. In a hybrid setup, subagents are the key routing unit: the main session runs on cloud (Opus/Sonnet) for orchestration, while subagents for grep, file exploration, simple edits, test running, and code search can be routed to local models. Per-subagent provider routing is not yet native (open issue #38698) — current workarounds use Claude Code Router (tag-based model selection in subagent prompts) or proxy-level routing via CCProxy/LiteLLM. Custom subagents can be defined in .claude/ config.",
       "links": [
-        { "label": "Claude Code Docs", "url": "https://docs.anthropic.com/en/docs/claude-code" }
+        { "label": "Custom Subagents", "url": "https://code.claude.com/docs/en/sub-agents" },
+        { "label": "Routing Feature Request", "url": "https://github.com/anthropics/claude-code/issues/38698" },
+        { "label": "Claude Code Router", "url": "https://github.com/musistudio/claude-code-router" }
       ]
     },
     {
