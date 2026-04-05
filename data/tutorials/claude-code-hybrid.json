@@ -1,36 +1,54 @@
 {
   "id": "claude-code-hybrid",
   "title": "Hybrid Cloud/Local with Claude Code",
-  "description": "How to route Claude Code between Anthropic's API and local models.",
+  "description": "How to route Claude Code between Anthropic's cloud (Max/Pro) and local models, using subagents as the routing boundary.",
   "stops": [
     {
       "node": "claude-code",
       "depth": 1,
       "title": "The Goal: Seamless Hybrid",
-      "narrative": "[Claude Code](node:claude-code) speaks only the [Anthropic Messages API](node:anthropic-api). The goal is to route some requests to local models (free, always available) and complex tasks to Anthropic's cloud (powerful, costs money).\n\nThere are three paths to achieve this, from simplest to most sophisticated."
+      "narrative": "[Claude Code](node:claude-code) speaks only the [Anthropic Messages API](node:anthropic-api). The goal is to run the main orchestrator on Anthropic's cloud ([Max](node:claude-max) or [Pro](node:claude-pro)) for complex reasoning, while routing [subagents](node:subagent) to local models for tasks that don't need cloud-grade intelligence.\n\nThis saves cloud tokens, reduces latency for simple operations, works offline for exploration, and keeps your subscription usage within limits."
     },
     {
-      "node": "ollama",
+      "node": "claude-max",
       "depth": 2,
-      "title": "Path 1: Direct Ollama Connection",
-      "narrative": "The simplest setup. Since [Ollama](node:ollama) v0.14.0 supports the [Anthropic API](node:anthropic-api) natively:\n\n```bash\nexport ANTHROPIC_BASE_URL=\"http://localhost:11434\"\nexport ANTHROPIC_AUTH_TOKEN=\"dummy\"\nclaude\n```\n\nThis sends everything to local models. Use `/model` inside Claude Code to switch between models you've pulled. Limitation: no automatic cloud fallback for complex tasks — you manually switch.\n\nClaude Code sends a ~16k token system prompt, so you need models with at least 64K context."
+      "title": "The Cloud Side: Max vs Pro",
+      "narrative": "[Claude Max](node:claude-max) ($100-200/month) gives 20x more Claude Code usage than [Pro](node:claude-pro) ($20/month). In a hybrid setup, the subscription tier determines how aggressively you need to offload to local.\n\n**Max plan**: comfortable headroom — route subagents locally as an optimization, not a necessity. Use cloud for everything complex.\n\n**Pro plan**: tighter budget — local routing becomes essential. Reserve cloud tokens for the main session's planning, multi-file edits, and architectural decisions. Route all exploration, search, and simple tasks locally.\n\nBoth plans give you Opus and Sonnet. The main Claude Code session — the one that understands your full request, plans the approach, and orchestrates subagents — should always run on cloud."
+    },
+    {
+      "node": "subagent",
+      "depth": 2,
+      "title": "Subagents: The Routing Boundary",
+      "narrative": "[Subagents](node:subagent) are the natural split point. Claude Code launches them for specific subtasks — each is an independent LLM call with its own context. This makes them perfect routing candidates.\n\n**Send to local** (a 32B model handles these fine):\n- **Explore/search agents**: grep for patterns, find files, read directory structures\n- **Code search**: \"find where this function is defined\", \"list all API endpoints\"\n- **Simple file reads**: summarize a file, extract a specific section\n- **Test runners**: run tests and report pass/fail (the LLM just interprets output)\n- **Linting/formatting**: check style, report issues\n- **Git operations**: parse git log, diff summary, branch status\n\n**Keep on cloud** (needs Opus/Sonnet reasoning):\n- **Multi-file edits**: coordinated changes across several files\n- **Architectural planning**: design decisions, migration strategies\n- **Complex refactoring**: rename across codebase, restructure modules\n- **Bug diagnosis**: tracing through complex call chains\n- **Code generation**: writing new features from specs\n- **The main orchestrator session itself**"
+    },
+    {
+      "node": "task-routing",
+      "depth": 2,
+      "title": "Routing Strategy in Practice",
+      "narrative": "The [task routing](node:task-routing) decision comes down to: does this task need deep reasoning or just pattern matching?\n\nA local [Qwen 2.5 Coder 32B](node:qwen25-coder-32b) or [Devstral Small 2](node:devstral-small-2) can reliably:\n- Parse tool call requests (grep, read, glob)\n- Summarize file contents\n- Answer \"where is X defined\" questions\n- Run a command and interpret the output\n\nIt will struggle with:\n- Holding 50+ files in context while planning edits\n- Understanding nuanced architectural constraints\n- Generating correct code for complex interfaces\n- Multi-step reasoning chains\n\nThe heuristic: if a subagent's job is mostly **reading and reporting**, it goes local. If it's **deciding and writing**, it stays on cloud."
     },
     {
       "node": "ccproxy",
       "depth": 2,
-      "title": "Path 2: Intelligent Routing with CCProxy",
-      "narrative": "[CCProxy](node:ccproxy) is purpose-built for Claude Code. This Go-based proxy intercepts requests and routes them based on token count, tool usage, or custom rules.\n\nFor example: send exploration/search subagent requests to local [Ollama](node:ollama), but route complex multi-file edits and planning to Anthropic's cloud. CCProxy can also connect to GitHub Copilot and Claude Pro/Max via OAuth.\n\nThis is the most Claude Code-aware routing option."
+      "title": "CCProxy: The Hybrid Router",
+      "narrative": "[CCProxy](node:ccproxy) is the most practical way to implement this. It sits between Claude Code and the backends, inspecting each request to decide routing.\n\nCCProxy can detect subagent requests (shorter context, specific tool patterns) and route them to local [Ollama](node:ollama), while forwarding the main session to Anthropic's cloud via your [Max](node:claude-max)/[Pro](node:claude-pro) subscription.\n\nIt also supports OAuth for Claude Pro/Max — so your main session authenticates against Anthropic normally, while subagents hit localhost.\n\nThis is the recommended setup for serious hybrid usage."
+    },
+    {
+      "node": "ollama",
+      "depth": 2,
+      "title": "Path 1: Direct Ollama (All-Local)",
+      "narrative": "The simplest setup. Since [Ollama](node:ollama) v0.14.0 supports the [Anthropic API](node:anthropic-api) natively:\n\n```bash\nexport ANTHROPIC_BASE_URL=\"http://localhost:11434\"\nexport ANTHROPIC_AUTH_TOKEN=\"dummy\"\nclaude\n```\n\nThis sends everything to local models. Use `/model` inside Claude Code to switch between models you've pulled. Limitation: no automatic cloud fallback for complex tasks — you manually switch.\n\nClaude Code sends a ~16k token system prompt, so you need models with at least 64K context.\n\nGood for: offline work, exploration sessions, simple edits where you don't want to burn cloud tokens."
     },
     {
       "node": "litellm",
       "depth": 2,
       "title": "Path 3: Full Proxy with LiteLLM",
-      "narrative": "[LiteLLM](node:litellm) is the general-purpose option. It translates between the [Anthropic API](node:anthropic-api) and [OpenAI-compatible](node:openai-api) backends, adds load balancing, fallbacks, and cost tracking.\n\n```bash\nexport ANTHROPIC_BASE_URL=\"http://0.0.0.0:4000\"\nexport ANTHROPIC_AUTH_TOKEN=\"$LITELLM_MASTER_KEY\"\n```\n\nMore complex to set up than [CCProxy](node:ccproxy) but more flexible — works with any backend, not just Claude Code. Security note: vet your LiteLLM version carefully (past PyPI compromise)."
+      "narrative": "[LiteLLM](node:litellm) is the general-purpose option. It translates between the [Anthropic API](node:anthropic-api) and [OpenAI-compatible](node:openai-api) backends, adds load balancing, fallbacks, and cost tracking.\n\n```bash\nexport ANTHROPIC_BASE_URL=\"http://0.0.0.0:4000\"\nexport ANTHROPIC_AUTH_TOKEN=\"$LITELLM_MASTER_KEY\"\n```\n\nMore complex to set up than [CCProxy](node:ccproxy) but more flexible — works with any backend, not just Claude Code. You can configure routing rules that send requests under a token threshold to local and everything else to Anthropic.\n\nSecurity note: vet your LiteLLM version carefully (past PyPI compromise)."
     },
     {
       "node": "aider",
       "depth": 2,
-      "title": "Alternative: Aider for Local-Only",
+      "title": "Alternative: Aider for Local-Only Work",
       "narrative": "If you want a coding assistant that's fully local-native, [Aider](node:aider) speaks [OpenAI-compatible API](node:openai-api) directly. No proxy needed — point it at [Ollama](node:ollama), [llama.cpp](node:llama-cpp) server, or [LM Studio](node:lm-studio).\n\nAider has deep git integration, multi-file editing, and auto-commits. Use it alongside Claude Code: Aider for local tasks, Claude Code for cloud tasks. Or use [Continue.dev](node:continue-dev) in your IDE for inline completions from a local model while Claude Code handles complex work in the terminal."
     },
     {
@@ -38,6 +56,12 @@
       "depth": 2,
       "title": "The Protocol Bridge",
       "narrative": "Everything hinges on two protocols: the [Anthropic Messages API](node:anthropic-api) (/v1/messages) and the [OpenAI-compatible API](node:openai-api) (/v1/chat/completions).\n\nClaude Code only speaks Anthropic. Most local engines only speak OpenAI. The bridge between them — [Ollama](node:ollama) (native), [CCProxy](node:ccproxy), or [LiteLLM](node:litellm) — is the critical piece.\n\nTool calling (function calling) is the main pain point. Some local engines drop tool call responses during streaming, limiting models to chat-only interactions. [Qwen3-Coder-Next](node:qwen3-coder-next) and [Devstral 2](node:devstral-2) have the best tool calling support among local models."
+    },
+    {
+      "node": "qwen25-coder-32b",
+      "depth": 2,
+      "title": "Recommended Local Models for Subagents",
+      "narrative": "For local subagent work, the model choice depends on the task:\n\n**Exploration/search subagents** — [Qwen 2.5 Coder 32B](node:qwen25-coder-32b) at Q8_0 (~34GB). Reliable tool calling, 128K context, fast enough for grep-and-report tasks. The workhorse.\n\n**Agentic tasks with tool use** — [Devstral Small 2](node:devstral-small-2) (24B). Purpose-built for agentic coding. Strong tool calling. Lighter than Qwen 32B.\n\n**Fast secondary** — [Phi-4](node:phi-4) (14B) at Q8_0 (~15GB). For trivial tasks like parsing command output or summarizing short files. Can run alongside a larger model.\n\n**If you have headroom** — [Qwen3-Coder-Next](node:qwen3-coder-next) (80B MoE, only 3B active). Near-Sonnet quality on coding. If it fits, it's the best local option for subagents that need more intelligence."
     }
   ]
 }
