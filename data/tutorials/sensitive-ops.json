@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Why Run Models Locally?",
+    "nodeId": "data-privacy",
+    "description": "Cloud LLM APIs require sending your data to external servers. For tasks involving credentials, personal emails, infrastructure configs, or unpublished content, that's a non-starter. Local inference keeps everything on your machine."
+  },
+  {
+    "title": "The Sensitive Operations Category",
+    "nodeId": "sensitive-ops",
+    "description": "Not all LLM tasks need frontier-level intelligence. Many are structured, repetitive, and verifiable: generating configs, processing emails, scraping data, managing CMS content. These tasks have a lower quality bar and high privacy requirements — the ideal fit for local models."
+  },
+  {
+    "title": "Infrastructure Maintenance",
+    "nodeId": "infra-maintenance",
+    "description": "Traefik configs, docker-compose files, DNS records, NixOS configurations — all follow patterns and templates. A 7B model produces correct output for these without exposing server credentials or IP addresses to external APIs."
+  },
+  {
+    "title": "Email and Content Processing",
+    "nodeId": "email-processing",
+    "description": "Drafting replies, extracting action items, classifying messages, summarizing threads. Personal and confidential content that should never hit a cloud API. A local model handles the structured language tasks reliably."
+  },
+  {
+    "title": "Web Scraping at Scale",
+    "nodeId": "web-scraping",
+    "description": "Parsing HTML and extracting structured data is high-volume grunt work. Running it locally avoids API costs and rate limits. Output is verifiable by schema validation — you don't need intelligence, just reliable extraction."
+  },
+  {
+    "title": "The Right Model for the Job",
+    "nodeId": "qwen25-coder-7b",
+    "description": "Qwen 2.5 Coder 7B hits the sweet spot: small footprint (~4.5GB), good structured output, fast on consumer hardware. At ~9 tok/s on CPU or ~50 tok/s on Strix Halo, it handles sensitive ops interactively."
+  },
+  {
+    "title": "The Local Inference Stack",
+    "nodeId": "ollama",
+    "description": "Ollama serves models on localhost:11434. Claude Code delegates sensitive tasks to it via an MCP server — complex reasoning goes to the Anthropic API, private data stays on-machine. Two tiers, one workflow."
+  },
+  {
+    "title": "Hardware: Strix Halo",
+    "nodeId": "strix-halo",
+    "description": "128GB unified LPDDR5X at 215 GB/s bandwidth. The iGPU runs 7B models at 50+ tok/s — fast enough for interactive use. Larger models (70B) fit too, at ~5 tok/s. The unified memory architecture eliminates the PCIe bottleneck that limits discrete GPU setups."
+  }
+]
