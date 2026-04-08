@@ -1,0 +1,266 @@
+flowchart LR
+  App["application ontology"]
+  CoreNode["gb:Node"]
+  CoreGroup["gb:Group"]
+  CoreEdge["gb:EdgeRelation"]
+  App -->|imports| CoreNode
+  App -->|imports| CoreGroup
+  App -->|imports| CoreEdge
+  Kind0["gbkind:assistant\nCoding Assistant"]
+  App --> Kind0
+  Kind0 -->|subClassOf| CoreNode
+  Kind1["gbkind:concept\nConcept"]
+  App --> Kind1
+  Kind1 -->|subClassOf| CoreNode
+  Kind2["gbkind:engine\nInference Engine"]
+  App --> Kind2
+  Kind2 -->|subClassOf| CoreNode
+  Kind3["gbkind:format\nQuantization Format"]
+  App --> Kind3
+  Kind3 -->|subClassOf| CoreNode
+  Kind4["gbkind:hardware\nHardware / Backend"]
+  App --> Kind4
+  Kind4 -->|subClassOf| CoreNode
+  Kind5["gbkind:hub\nModel Hub / Quantizer"]
+  App --> Kind5
+  Kind5 -->|subClassOf| CoreNode
+  Kind6["gbkind:model\nModel"]
+  App --> Kind6
+  Kind6 -->|subClassOf| CoreNode
+  Kind7["gbkind:protocol\nAPI Protocol"]
+  App --> Kind7
+  Kind7 -->|subClassOf| CoreNode
+  Kind8["gbkind:proxy\nAPI Proxy / Router"]
+  App --> Kind8
+  Kind8 -->|subClassOf| CoreNode
+  Group0["gbgroup:assistants"]
+  App --> Group0
+  Group0 -->|instanceOf| CoreGroup
+  Group1["gbgroup:code-models"]
+  App --> Group1
+  Group1 -->|instanceOf| CoreGroup
+  Group2["gbgroup:concepts"]
+  App --> Group2
+  Group2 -->|instanceOf| CoreGroup
+  Group3["gbgroup:distribution"]
+  App --> Group3
+  Group3 -->|instanceOf| CoreGroup
+  Group4["gbgroup:engines"]
+  App --> Group4
+  Group4 -->|instanceOf| CoreGroup
+  Group5["gbgroup:general-models"]
+  App --> Group5
+  Group5 -->|instanceOf| CoreGroup
+  Group6["gbgroup:hardware"]
+  App --> Group6
+  Group6 -->|instanceOf| CoreGroup
+  Group7["gbgroup:protocols"]
+  App --> Group7
+  Group7 -->|instanceOf| CoreGroup
+  Group8["gbgroup:proxies"]
+  App --> Group8
+  Group8 -->|instanceOf| CoreGroup
+  Group9["gbgroup:quantization"]
+  App --> Group9
+  Group9 -->|instanceOf| CoreGroup
+  Group10["gbgroup:reasoning-models"]
+  App --> Group10
+  Group10 -->|instanceOf| CoreGroup
+  Edge0["gbedge:128GB unified"]
+  App --> Edge0
+  Edge0 -->|subPropertyOf| CoreEdge
+  Edge1["gbedge:AMD GPU compute"]
+  App --> Edge1
+  Edge1 -->|subPropertyOf| CoreEdge
+  Edge2["gbedge:AMD integration"]
+  App --> Edge2
+  Edge2 -->|subPropertyOf| CoreEdge
+  Edge3["gbedge:GPU compute API"]
+  App --> Edge3
+  Edge3 -->|subPropertyOf| CoreEdge
+  Edge4["gbedge:NVIDIA uses"]
+  App --> Edge4
+  Edge4 -->|subPropertyOf| CoreEdge
+  Edge5["gbedge:adapts"]
+  App --> Edge5
+  Edge5 -->|subPropertyOf| CoreEdge
+  Edge6["gbedge:available as"]
+  App --> Edge6
+  Edge6 -->|subPropertyOf| CoreEdge
+  Edge7["gbedge:available via"]
+  App --> Edge7
+  Edge7 -->|subPropertyOf| CoreEdge
+  Edge8["gbedge:benefits from unified memory"]
+  App --> Edge8
+  Edge8 -->|subPropertyOf| CoreEdge
+  Edge9["gbedge:best via RADV driver"]
+  App --> Edge9
+  Edge9 -->|subPropertyOf| CoreEdge
+  Edge10["gbedge:bottlenecked by"]
+  App --> Edge10
+  Edge10 -->|subPropertyOf| CoreEdge
+  Edge11["gbedge:built for"]
+  App --> Edge11
+  Edge11 -->|subPropertyOf| CoreEdge
+  Edge12["gbedge:built on"]
+  App --> Edge12
+  Edge12 -->|subPropertyOf| CoreEdge
+  Edge13["gbedge:bundles"]
+  App --> Edge13
+  Edge13 -->|subPropertyOf| CoreEdge
+  Edge14["gbedge:commonly uses"]
+  App --> Edge14
+  Edge14 -->|subPropertyOf| CoreEdge
+  Edge15["gbedge:compresses"]
+  App --> Edge15
+  Edge15 -->|subPropertyOf| CoreEdge
+  Edge16["gbedge:connects to"]
+  App --> Edge16
+  Edge16 -->|subPropertyOf| CoreEdge
+  Edge17["gbedge:connects via ANTHROPIC_BASE_URL"]
+  App --> Edge17
+  Edge17 -->|subPropertyOf| CoreEdge
+  Edge18["gbedge:connects via OPENAI_BASE_URL"]
+  App --> Edge18
+  Edge18 -->|subPropertyOf| CoreEdge
+  Edge19["gbedge:connects via OpenAI compat"]
+  App --> Edge19
+  Edge19 -->|subPropertyOf| CoreEdge
+  Edge20["gbedge:consumes via"]
+  App --> Edge20
+  Edge20 -->|subPropertyOf| CoreEdge
+  Edge21["gbedge:created via"]
+  App --> Edge21
+  Edge21 -->|subPropertyOf| CoreEdge
+  Edge22["gbedge:direct connection"]
+  App --> Edge22
+  Edge22 -->|subPropertyOf| CoreEdge
+  Edge23["gbedge:direct connection (v0.14+)"]
+  App --> Edge23
+  Edge23 -->|subPropertyOf| CoreEdge
+  Edge24["gbedge:evolved into"]
+  App --> Edge24
+  Edge24 -->|subPropertyOf| CoreEdge
+  Edge25["gbedge:extends"]
+  App --> Edge25
+  Edge25 -->|subPropertyOf| CoreEdge
+  Edge26["gbedge:forks"]
+  App --> Edge26
+  Edge26 -->|subPropertyOf| CoreEdge
+  Edge27["gbedge:has"]
+  App --> Edge27
+  Edge27 -->|subPropertyOf| CoreEdge
+  Edge28["gbedge:has total vs active"]
+  App --> Edge28
+  Edge28 -->|subPropertyOf| CoreEdge
+  Edge29["gbedge:hosts"]
+  App --> Edge29
+  Edge29 -->|subPropertyOf| CoreEdge
+  Edge30["gbedge:implements"]
+  App --> Edge30
+  Edge30 -->|subPropertyOf| CoreEdge
+  Edge31["gbedge:includes"]
+  App --> Edge31
+  Edge31 -->|subPropertyOf| CoreEdge
+  Edge32["gbedge:integrates"]
+  App --> Edge32
+  Edge32 -->|subPropertyOf| CoreEdge
+  Edge33["gbedge:intercepts"]
+  App --> Edge33
+  Edge33 -->|subPropertyOf| CoreEdge
+  Edge34["gbedge:is a"]
+  App --> Edge34
+  Edge34 -->|subPropertyOf| CoreEdge
+  Edge35["gbedge:leverages for prefill"]
+  App --> Edge35
+  Edge35 -->|subPropertyOf| CoreEdge
+  Edge36["gbedge:measured in"]
+  App --> Edge36
+  Edge36 -->|subPropertyOf| CoreEdge
+  Edge37["gbedge:needs full size in"]
+  App --> Edge37
+  Edge37 -->|subPropertyOf| CoreEdge
+  Edge38["gbedge:optimized for"]
+  App --> Edge38
+  Edge38 -->|subPropertyOf| CoreEdge
+  Edge39["gbedge:processes"]
+  App --> Edge39
+  Edge39 -->|subPropertyOf| CoreEdge
+  Edge40["gbedge:produces"]
+  App --> Edge40
+  Edge40 -->|subPropertyOf| CoreEdge
+  Edge41["gbedge:produces (Dynamic 2.0)"]
+  App --> Edge41
+  Edge41 -->|subPropertyOf| CoreEdge
+  Edge42["gbedge:provides"]
+  App --> Edge42
+  Edge42 -->|subPropertyOf| CoreEdge
+  Edge43["gbedge:provides tools for"]
+  App --> Edge43
+  Edge43 -->|subPropertyOf| CoreEdge
+  Edge44["gbedge:publishes to"]
+  App --> Edge44
+  Edge44 -->|subPropertyOf| CoreEdge
+  Edge45["gbedge:pulls from"]
+  App --> Edge45
+  Edge45 -->|subPropertyOf| CoreEdge
+  Edge46["gbedge:requires"]
+  App --> Edge46
+  Edge46 -->|subPropertyOf| CoreEdge
+  Edge47["gbedge:routes to"]
+  App --> Edge47
+  Edge47 -->|subPropertyOf| CoreEdge
+  Edge48["gbedge:runs via"]
+  App --> Edge48
+  Edge48 -->|subPropertyOf| CoreEdge
+  Edge49["gbedge:serves"]
+  App --> Edge49
+  Edge49 -->|subPropertyOf| CoreEdge
+  Edge50["gbedge:serves via llama-server"]
+  App --> Edge50
+  Edge50 -->|subPropertyOf| CoreEdge
+  Edge51["gbedge:sized by"]
+  App --> Edge51
+  Edge51 -->|subPropertyOf| CoreEdge
+  Edge52["gbedge:speaks natively"]
+  App --> Edge52
+  Edge52 -->|subPropertyOf| CoreEdge
+  Edge53["gbedge:successor format for"]
+  App --> Edge53
+  Edge53 -->|subPropertyOf| CoreEdge
+  Edge54["gbedge:supported (regressions)"]
+  App --> Edge54
+  Edge54 -->|subPropertyOf| CoreEdge
+  Edge55["gbedge:supports"]
+  App --> Edge55
+  Edge55 -->|subPropertyOf| CoreEdge
+  Edge56["gbedge:supports (with issues)"]
+  App --> Edge56
+  Edge56 -->|subPropertyOf| CoreEdge
+  Edge57["gbedge:supports natively"]
+  App --> Edge57
+  Edge57 -->|subPropertyOf| CoreEdge
+  Edge58["gbedge:supports since v0.14"]
+  App --> Edge58
+  Edge58 -->|subPropertyOf| CoreEdge
+  Edge59["gbedge:supports via openai/ prefix"]
+  App --> Edge59
+  Edge59 -->|subPropertyOf| CoreEdge
+  Edge60["gbedge:translates from"]
+  App --> Edge60
+  Edge60 -->|subPropertyOf| CoreEdge
+  Edge61["gbedge:translates to"]
+  App --> Edge61
+  Edge61 -->|subPropertyOf| CoreEdge
+  Edge62["gbedge:uses"]
+  App --> Edge62
+  Edge62 -->|subPropertyOf| CoreEdge
+  Edge63["gbedge:uses as backend"]
+  App --> Edge63
+  Edge63 -->|subPropertyOf| CoreEdge
+  Edge64["gbedge:wraps"]
+  App --> Edge64
+  Edge64 -->|subPropertyOf| CoreEdge
+  Edge65["gbedge:~215 GB/s"]
+  App --> Edge65
+  Edge65 -->|subPropertyOf| CoreEdge
