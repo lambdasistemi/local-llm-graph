@@ -1,0 +1,584 @@
+@prefix gb: <https://lambdasistemi.github.io/graph-browser/vocab/terms#> .
+@prefix gbkind: <https://lambdasistemi.github.io/graph-browser/vocab/kinds#> .
+@prefix gbgroup: <https://lambdasistemi.github.io/graph-browser/vocab/groups#> .
+@prefix gbedge: <https://lambdasistemi.github.io/graph-browser/vocab/edges#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://lambdasistemi.github.io/graph-browser/vocab/application-ontology> a owl:Ontology ;
+  rdfs:label "Graph Browser application vocabulary" ;
+  dcterms:description "Repository-specific vocabulary generated from graph-browser config and graph data." ;
+  owl:imports <https://lambdasistemi.github.io/graph-browser/vocab/ontology> ;
+  owl:versionInfo "0.1.0" .
+
+gbkind:assistant a owl:Class ;
+  rdfs:label "Coding Assistant" ;
+  gb:kindId "assistant" ;
+  gb:color "#f778ba" ;
+  gb:shape "round-octagon" ;
+  rdfs:subClassOf gb:Node .
+
+gbkind:concept a owl:Class ;
+  rdfs:label "Concept" ;
+  gb:kindId "concept" ;
+  gb:color "#56d364" ;
+  gb:shape "star" ;
+  rdfs:subClassOf gb:Node .
+
+gbkind:engine a owl:Class ;
+  rdfs:label "Inference Engine" ;
+  gb:kindId "engine" ;
+  gb:color "#3fb950" ;
+  gb:shape "round-rectangle" ;
+  rdfs:subClassOf gb:Node .
+
+gbkind:format a owl:Class ;
+  rdfs:label "Quantization Format" ;
+  gb:kindId "format" ;
+  gb:color "#d2a8ff" ;
+  gb:shape "diamond" ;
+  rdfs:subClassOf gb:Node .
+
+gbkind:hardware a owl:Class ;
+  rdfs:label "Hardware / Backend" ;
+  gb:kindId "hardware" ;
+  gb:color "#79c0ff" ;
+  gb:shape "barrel" ;
+  rdfs:subClassOf gb:Node .
+
+gbkind:hub a owl:Class ;
+  rdfs:label "Model Hub / Quantizer" ;
+  gb:kindId "hub" ;
+  gb:color "#e3b341" ;
+  gb:shape "round-pentagon" ;
+  rdfs:subClassOf gb:Node .
+
+gbkind:model a owl:Class ;
+  rdfs:label "Model" ;
+  gb:kindId "model" ;
+  gb:color "#f0883e" ;
+  gb:shape "ellipse" ;
+  rdfs:subClassOf gb:Node .
+
+gbkind:protocol a owl:Class ;
+  rdfs:label "API Protocol" ;
+  gb:kindId "protocol" ;
+  gb:color "#8b949e" ;
+  gb:shape "rectangle" ;
+  rdfs:subClassOf gb:Node .
+
+gbkind:proxy a owl:Class ;
+  rdfs:label "API Proxy / Router" ;
+  gb:kindId "proxy" ;
+  gb:color "#58a6ff" ;
+  gb:shape "round-hexagon" ;
+  rdfs:subClassOf gb:Node .
+
+
+gbgroup:assistants a gb:Group ;
+  rdfs:label "assistants" ;
+  gb:groupId "assistants" .
+
+gbgroup:code-models a gb:Group ;
+  rdfs:label "code-models" ;
+  gb:groupId "code-models" .
+
+gbgroup:concepts a gb:Group ;
+  rdfs:label "concepts" ;
+  gb:groupId "concepts" .
+
+gbgroup:distribution a gb:Group ;
+  rdfs:label "distribution" ;
+  gb:groupId "distribution" .
+
+gbgroup:engines a gb:Group ;
+  rdfs:label "engines" ;
+  gb:groupId "engines" .
+
+gbgroup:general-models a gb:Group ;
+  rdfs:label "general-models" ;
+  gb:groupId "general-models" .
+
+gbgroup:hardware a gb:Group ;
+  rdfs:label "hardware" ;
+  gb:groupId "hardware" .
+
+gbgroup:protocols a gb:Group ;
+  rdfs:label "protocols" ;
+  gb:groupId "protocols" .
+
+gbgroup:proxies a gb:Group ;
+  rdfs:label "proxies" ;
+  gb:groupId "proxies" .
+
+gbgroup:quantization a gb:Group ;
+  rdfs:label "quantization" ;
+  gb:groupId "quantization" .
+
+gbgroup:reasoning-models a gb:Group ;
+  rdfs:label "reasoning-models" ;
+  gb:groupId "reasoning-models" .
+
+
+gbedge:128GB%20unified a owl:ObjectProperty ;
+  rdfs:label "128GB unified" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "128GB unified" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:AMD%20GPU%20compute a owl:ObjectProperty ;
+  rdfs:label "AMD GPU compute" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "AMD GPU compute" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:AMD%20integration a owl:ObjectProperty ;
+  rdfs:label "AMD integration" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "AMD integration" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:GPU%20compute%20API a owl:ObjectProperty ;
+  rdfs:label "GPU compute API" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "GPU compute API" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:NVIDIA%20uses a owl:ObjectProperty ;
+  rdfs:label "NVIDIA uses" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "NVIDIA uses" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:adapts a owl:ObjectProperty ;
+  rdfs:label "adapts" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "adapts" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:available%20as a owl:ObjectProperty ;
+  rdfs:label "available as" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "available as" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:available%20via a owl:ObjectProperty ;
+  rdfs:label "available via" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "available via" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:benefits%20from%20unified%20memory a owl:ObjectProperty ;
+  rdfs:label "benefits from unified memory" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "benefits from unified memory" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:best%20via%20RADV%20driver a owl:ObjectProperty ;
+  rdfs:label "best via RADV driver" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "best via RADV driver" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:bottlenecked%20by a owl:ObjectProperty ;
+  rdfs:label "bottlenecked by" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "bottlenecked by" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:built%20for a owl:ObjectProperty ;
+  rdfs:label "built for" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "built for" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:built%20on a owl:ObjectProperty ;
+  rdfs:label "built on" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "built on" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:bundles a owl:ObjectProperty ;
+  rdfs:label "bundles" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "bundles" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:commonly%20uses a owl:ObjectProperty ;
+  rdfs:label "commonly uses" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "commonly uses" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:compresses a owl:ObjectProperty ;
+  rdfs:label "compresses" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "compresses" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:connects%20to a owl:ObjectProperty ;
+  rdfs:label "connects to" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "connects to" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:connects%20via%20ANTHROPIC_BASE_URL a owl:ObjectProperty ;
+  rdfs:label "connects via ANTHROPIC_BASE_URL" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "connects via ANTHROPIC_BASE_URL" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:connects%20via%20OPENAI_BASE_URL a owl:ObjectProperty ;
+  rdfs:label "connects via OPENAI_BASE_URL" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "connects via OPENAI_BASE_URL" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:connects%20via%20OpenAI%20compat a owl:ObjectProperty ;
+  rdfs:label "connects via OpenAI compat" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "connects via OpenAI compat" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:consumes%20via a owl:ObjectProperty ;
+  rdfs:label "consumes via" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "consumes via" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:created%20via a owl:ObjectProperty ;
+  rdfs:label "created via" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "created via" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:direct%20connection a owl:ObjectProperty ;
+  rdfs:label "direct connection" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "direct connection" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:direct%20connection%20(v0.14%2B) a owl:ObjectProperty ;
+  rdfs:label "direct connection (v0.14+)" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "direct connection (v0.14+)" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:evolved%20into a owl:ObjectProperty ;
+  rdfs:label "evolved into" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "evolved into" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:extends a owl:ObjectProperty ;
+  rdfs:label "extends" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "extends" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:forks a owl:ObjectProperty ;
+  rdfs:label "forks" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "forks" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:has a owl:ObjectProperty ;
+  rdfs:label "has" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "has" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:has%20total%20vs%20active a owl:ObjectProperty ;
+  rdfs:label "has total vs active" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "has total vs active" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:hosts a owl:ObjectProperty ;
+  rdfs:label "hosts" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "hosts" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:implements a owl:ObjectProperty ;
+  rdfs:label "implements" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "implements" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:includes a owl:ObjectProperty ;
+  rdfs:label "includes" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "includes" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:integrates a owl:ObjectProperty ;
+  rdfs:label "integrates" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "integrates" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:intercepts a owl:ObjectProperty ;
+  rdfs:label "intercepts" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "intercepts" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:is%20a a owl:ObjectProperty ;
+  rdfs:label "is a" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "is a" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:leverages%20for%20prefill a owl:ObjectProperty ;
+  rdfs:label "leverages for prefill" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "leverages for prefill" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:measured%20in a owl:ObjectProperty ;
+  rdfs:label "measured in" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "measured in" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:needs%20full%20size%20in a owl:ObjectProperty ;
+  rdfs:label "needs full size in" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "needs full size in" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:optimized%20for a owl:ObjectProperty ;
+  rdfs:label "optimized for" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "optimized for" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:processes a owl:ObjectProperty ;
+  rdfs:label "processes" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "processes" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:produces a owl:ObjectProperty ;
+  rdfs:label "produces" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "produces" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:produces%20(Dynamic%202.0) a owl:ObjectProperty ;
+  rdfs:label "produces (Dynamic 2.0)" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "produces (Dynamic 2.0)" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:provides a owl:ObjectProperty ;
+  rdfs:label "provides" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "provides" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:provides%20tools%20for a owl:ObjectProperty ;
+  rdfs:label "provides tools for" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "provides tools for" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:publishes%20to a owl:ObjectProperty ;
+  rdfs:label "publishes to" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "publishes to" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:pulls%20from a owl:ObjectProperty ;
+  rdfs:label "pulls from" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "pulls from" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:requires a owl:ObjectProperty ;
+  rdfs:label "requires" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "requires" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:routes%20to a owl:ObjectProperty ;
+  rdfs:label "routes to" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "routes to" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:runs%20via a owl:ObjectProperty ;
+  rdfs:label "runs via" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "runs via" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:serves a owl:ObjectProperty ;
+  rdfs:label "serves" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "serves" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:serves%20via%20llama-server a owl:ObjectProperty ;
+  rdfs:label "serves via llama-server" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "serves via llama-server" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:sized%20by a owl:ObjectProperty ;
+  rdfs:label "sized by" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "sized by" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:speaks%20natively a owl:ObjectProperty ;
+  rdfs:label "speaks natively" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "speaks natively" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:successor%20format%20for a owl:ObjectProperty ;
+  rdfs:label "successor format for" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "successor format for" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:supported%20(regressions) a owl:ObjectProperty ;
+  rdfs:label "supported (regressions)" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "supported (regressions)" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:supports a owl:ObjectProperty ;
+  rdfs:label "supports" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "supports" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:supports%20(with%20issues) a owl:ObjectProperty ;
+  rdfs:label "supports (with issues)" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "supports (with issues)" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:supports%20natively a owl:ObjectProperty ;
+  rdfs:label "supports natively" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "supports natively" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:supports%20since%20v0.14 a owl:ObjectProperty ;
+  rdfs:label "supports since v0.14" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "supports since v0.14" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:supports%20via%20openai%2F%20prefix a owl:ObjectProperty ;
+  rdfs:label "supports via openai/ prefix" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "supports via openai/ prefix" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:translates%20from a owl:ObjectProperty ;
+  rdfs:label "translates from" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "translates from" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:translates%20to a owl:ObjectProperty ;
+  rdfs:label "translates to" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "translates to" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:uses a owl:ObjectProperty ;
+  rdfs:label "uses" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "uses" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:uses%20as%20backend a owl:ObjectProperty ;
+  rdfs:label "uses as backend" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "uses as backend" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:wraps a owl:ObjectProperty ;
+  rdfs:label "wraps" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "wraps" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
+
+gbedge:~215%20GB%2Fs a owl:ObjectProperty ;
+  rdfs:label "~215 GB/s" ;
+  rdfs:subPropertyOf gb:EdgeRelation ;
+  gb:edgeLabel "~215 GB/s" ;
+  rdfs:domain gb:Node ;
+  rdfs:range gb:Node .
